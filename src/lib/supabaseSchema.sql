@@ -1,7 +1,9 @@
 -- Enable UUID extension
 create extension if not exists "uuid-ossp";
 
--- Profiles (extends auth.users)
+-- =====================
+-- PROFILES
+-- =====================
 create table public.profiles (
   id uuid references auth.users on delete cascade primary key,
   email text unique not null,
@@ -13,11 +15,10 @@ create table public.profiles (
 alter table public.profiles enable row level security;
 create policy "Users can view own profile" on public.profiles for select using (auth.uid() = id);
 create policy "Users can update own profile" on public.profiles for update using (auth.uid() = id);
-create policy "Therapist can view patient profiles" on public.profiles for select using (
-  exists (select 1 from public.patients p where p.profile_id = profiles.id and p.therapist_id = auth.uid())
-);
 
--- Patients
+-- =====================
+-- PATIENTS
+-- =====================
 create table public.patients (
   id uuid default uuid_generate_v4() primary key,
   therapist_id uuid references public.profiles(id) on delete cascade not null,
@@ -37,7 +38,14 @@ alter table public.patients enable row level security;
 create policy "Therapist manages their patients" on public.patients for all using (therapist_id = auth.uid());
 create policy "Patient can view own record" on public.patients for select using (profile_id = auth.uid());
 
--- Availability
+-- Policy on profiles that needs patients to exist first
+create policy "Therapist can view patient profiles" on public.profiles for select using (
+  exists (select 1 from public.patients p where p.profile_id = profiles.id and p.therapist_id = auth.uid())
+);
+
+-- =====================
+-- AVAILABILITY
+-- =====================
 create table public.availability (
   id uuid default uuid_generate_v4() primary key,
   therapist_id uuid references public.profiles(id) on delete cascade not null,
@@ -50,7 +58,9 @@ alter table public.availability enable row level security;
 create policy "Therapist manages availability" on public.availability for all using (therapist_id = auth.uid());
 create policy "Anyone can view availability" on public.availability for select using (true);
 
--- Sessions
+-- =====================
+-- SESSIONS
+-- =====================
 create table public.sessions (
   id uuid default uuid_generate_v4() primary key,
   therapist_id uuid references public.profiles(id) on delete cascade not null,
@@ -70,7 +80,9 @@ create policy "Patient can insert sessions" on public.sessions for insert with c
   exists (select 1 from public.patients p where p.id = sessions.patient_id and p.profile_id = auth.uid())
 );
 
--- Assigned Tests
+-- =====================
+-- ASSIGNED TESTS
+-- =====================
 create table public.assigned_tests (
   id uuid default uuid_generate_v4() primary key,
   therapist_id uuid references public.profiles(id) on delete cascade not null,
@@ -84,14 +96,16 @@ create table public.assigned_tests (
 );
 alter table public.assigned_tests enable row level security;
 create policy "Therapist manages assigned tests" on public.assigned_tests for all using (therapist_id = auth.uid());
-create policy "Patient can view and update own tests" on public.assigned_tests for select using (
+create policy "Patient can view own tests" on public.assigned_tests for select using (
   exists (select 1 from public.patients p where p.id = assigned_tests.patient_id and p.profile_id = auth.uid())
 );
 create policy "Patient can update own tests" on public.assigned_tests for update using (
   exists (select 1 from public.patients p where p.id = assigned_tests.patient_id and p.profile_id = auth.uid())
 );
 
--- Mood Entries
+-- =====================
+-- MOOD ENTRIES
+-- =====================
 create table public.mood_entries (
   id uuid default uuid_generate_v4() primary key,
   patient_id uuid references public.patients(id) on delete cascade not null,
@@ -109,7 +123,9 @@ create policy "Therapist can view patient mood" on public.mood_entries for selec
   exists (select 1 from public.patients p where p.id = mood_entries.patient_id and p.therapist_id = auth.uid())
 );
 
--- Notifications
+-- =====================
+-- NOTIFICATIONS
+-- =====================
 create table public.notifications (
   id uuid default uuid_generate_v4() primary key,
   patient_id uuid references public.patients(id) on delete cascade not null,
@@ -127,7 +143,9 @@ create policy "Therapist can insert notifications" on public.notifications for i
   exists (select 1 from public.patients p where p.id = notifications.patient_id and p.therapist_id = auth.uid())
 );
 
--- Function to handle new user signup
+-- =====================
+-- AUTO-CREATE PROFILE ON SIGNUP
+-- =====================
 create or replace function public.handle_new_user()
 returns trigger as $$
 begin
