@@ -1,7 +1,19 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co'
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder'
+function getValidUrl(raw: string | undefined): string {
+  if (!raw) return 'https://placeholder.supabase.co'
+  const trimmed = raw.replace(/^["']|["']$/g, '').trim()
+  try {
+    new URL(trimmed)
+    return trimmed
+  } catch {
+    return 'https://placeholder.supabase.co'
+  }
+}
+
+const supabaseUrl = getValidUrl(import.meta.env.VITE_SUPABASE_URL)
+const supabaseAnonKey = (import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-key')
+  .replace(/^["']|["']$/g, '').trim()
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
