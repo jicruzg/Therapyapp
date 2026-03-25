@@ -1,6 +1,34 @@
+import { Component } from 'react'
+import type { ReactNode } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import Layout from './components/Layout'
+
+class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+  constructor(props: { children: ReactNode }) {
+    super(props)
+    this.state = { error: null }
+  }
+  static getDerivedStateFromError(error: Error) {
+    return { error }
+  }
+  render() {
+    if (this.state.error) {
+      return (
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh', fontFamily:'sans-serif', flexDirection:'column', gap:'16px', padding:'24px', textAlign:'center' }}>
+          <div style={{ fontSize:'48px' }}>⚠️</div>
+          <h2 style={{ color:'#1e1e2e', margin:0 }}>Error en la aplicación</h2>
+          <pre style={{ background:'#f1f5f9', padding:'16px', borderRadius:'12px', fontSize:'12px', maxWidth:'600px', overflow:'auto', textAlign:'left', color:'#dc2626' }}>
+            {this.state.error.message}
+            {'\n'}
+            {this.state.error.stack}
+          </pre>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
 
 // Auth pages
 import LoginPage from './pages/auth/LoginPage'
@@ -133,10 +161,12 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <AppRoutes />
-      </AuthProvider>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </BrowserRouter>
+    </ErrorBoundary>
   )
 }
