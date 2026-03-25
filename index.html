@@ -11,6 +11,13 @@
   </head>
   <body style="margin:0;background:#4f46e5">
     <noscript style="display:block;color:white;font-size:20px;padding:40px;font-family:sans-serif">JavaScript está desactivado. Por favor actívalo para usar esta aplicación.</noscript>
+    <script>
+      document.body.style.background = 'green';
+      window.addEventListener('error', function(e) {
+        document.body.style.background = 'red';
+        document.body.innerHTML = '<pre style="color:white;padding:40px;font-family:monospace;font-size:14px;white-space:pre-wrap">JS ERROR:\n' + e.message + '\nfile: ' + e.filename + '\nline: ' + e.lineno + '\n' + (e.error ? e.error.stack : '') + '</pre>';
+      }, true);
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
