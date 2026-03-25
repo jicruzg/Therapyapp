@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 
 function getValidUrl(raw: string | undefined): string {
   if (!raw) return 'https://placeholder.supabase.co'
-  const trimmed = raw.replace(/^["']|["']$/g, '').trim()
+  const trimmed = raw.replace(/^["'<]|["'>]$/g, '').trim()
   try {
     new URL(trimmed)
     return trimmed
@@ -13,7 +13,7 @@ function getValidUrl(raw: string | undefined): string {
 
 const supabaseUrl = getValidUrl(import.meta.env.VITE_SUPABASE_URL)
 const supabaseAnonKey = (import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-key')
-  .replace(/^["']|["']$/g, '').trim()
+  .replace(/^["'<]|["'>]$/g, '').trim()
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
