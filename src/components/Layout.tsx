@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { useLang } from '../contexts/LangContext'
 import {
   Users, Calendar, ClipboardList, LogOut, Menu, X,
-  Bell, BookOpen, BarChart2, Home, ChevronRight, Activity
+  Bell, BookOpen, Home, ChevronRight, Activity
 } from 'lucide-react'
 
 interface LayoutProps { children: ReactNode }
