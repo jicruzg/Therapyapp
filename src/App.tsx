@@ -2,6 +2,7 @@ import { Component } from 'react'
 import type { ReactNode } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
+import { LangProvider } from './contexts/LangContext'
 import Layout from './components/Layout'
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
@@ -163,9 +164,11 @@ export default function App() {
   return (
     <ErrorBoundary>
       <BrowserRouter>
-        <AuthProvider>
-          <AppRoutes />
-        </AuthProvider>
+        <LangProvider>
+          <AuthProvider>
+            <AppRoutes />
+          </AuthProvider>
+        </LangProvider>
       </BrowserRouter>
     </ErrorBoundary>
   )

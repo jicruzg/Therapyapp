@@ -330,16 +330,16 @@ export default function ResourcesPage() {
 
   if (active) {
     return (
-      <div className="max-w-2xl mx-auto">
-        <button onClick={() => setActiveResource(null)} className="flex items-center gap-2 text-sm text-gray-500 hover:text-indigo-600 mb-6">
+      <div className="max-w-2xl mx-auto space-y-6">
+        <button onClick={() => setActiveResource(null)} className="flex items-center gap-2 text-sm font-semibold text-[#526070] hover:text-[#194067] transition-colors">
           <ArrowLeft size={16} /> Volver a recursos
         </button>
-        <div className="mb-6">
-          <div className={`w-12 h-12 ${active.color} rounded-2xl flex items-center justify-center mb-3`}>
-            <active.icon size={24} className={active.iconColor} />
+        <div>
+          <div className={`w-14 h-14 ${active.color} rounded-2xl flex items-center justify-center mb-4`}>
+            <active.icon size={26} className={active.iconColor} />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">{active.title}</h1>
-          <p className="text-gray-500 text-sm mt-1">{active.subtitle}</p>
+          <h1 className="text-2xl font-bold text-[#0d1b2a]">{active.title}</h1>
+          <p className="text-[#526070] text-sm mt-1">{active.subtitle}</p>
         </div>
         {active.content}
       </div>
@@ -347,25 +347,28 @@ export default function ResourcesPage() {
   }
 
   return (
-    <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Recursos</h1>
-        <p className="text-gray-500 text-sm mt-1">Material de apoyo para tu bienestar</p>
+    <div className="space-y-6">
+      <div>
+        <p className="text-sm font-semibold text-[#f9a825] uppercase tracking-widest mb-1">Apoyo</p>
+        <h1 className="text-3xl font-bold text-[#0d1b2a]">Recursos</h1>
+        <p className="text-[#526070] mt-1">Material de apoyo para tu bienestar</p>
       </div>
 
       <div className="grid gap-4">
         {resources.map(r => (
-          <button key={r.id} className="text-left" onClick={() => setActiveResource(r.id)}>
-            <Card className={`p-5 hover:shadow-md transition-all border-2 ${r.borderColor} hover:scale-[1.01]`}>
+          <button key={r.id} className="text-left w-full" onClick={() => setActiveResource(r.id)}>
+            <Card hover className="p-5 transition-all duration-200">
               <div className="flex items-center gap-4">
                 <div className={`w-14 h-14 ${r.color} rounded-2xl flex items-center justify-center flex-shrink-0`}>
-                  <r.icon size={28} className={r.iconColor} />
+                  <r.icon size={26} className={r.iconColor} />
                 </div>
-                <div className="flex-1">
-                  <p className="text-lg font-semibold text-gray-900">{r.title}</p>
-                  <p className="text-sm text-gray-500 mt-0.5">{r.subtitle}</p>
+                <div className="flex-1 text-left">
+                  <p className="text-lg font-bold text-[#0d1b2a]">{r.title}</p>
+                  <p className="text-sm text-[#526070] mt-0.5">{r.subtitle}</p>
                 </div>
-                <ChevronRight size={20} className="text-gray-400" />
+                <div className="w-9 h-9 bg-[#f0f4f8] rounded-xl flex items-center justify-center flex-shrink-0">
+                  <ChevronRight size={18} className="text-[#526070]" />
+                </div>
               </div>
             </Card>
           </button>
@@ -373,14 +376,14 @@ export default function ResourcesPage() {
       </div>
 
       {/* Affirmation */}
-      <Card className="mt-6 p-5 bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-100">
-        <div className="flex items-center gap-3">
-          <Star size={20} className="text-indigo-500 flex-shrink-0" />
-          <p className="text-sm text-indigo-800 italic">
-            "El camino hacia el bienestar es un proceso. Cada pequeño paso que das importa."
-          </p>
+      <div className="bg-[#194067] rounded-2xl p-5 flex items-center gap-4">
+        <div className="w-10 h-10 bg-[#f9a825] rounded-xl flex items-center justify-center flex-shrink-0">
+          <Star size={18} className="text-[#0d1b2a]" />
         </div>
-      </Card>
+        <p className="text-white/80 text-sm italic leading-relaxed">
+          "El camino hacia el bienestar es un proceso. Cada pequeño paso que das importa."
+        </p>
+      </div>
     </div>
   )
 }

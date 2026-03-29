@@ -84,8 +84,12 @@ export default function PatientDetailPage() {
     setAssignedTests(prev => prev.filter(t => t.id !== testId))
   }
 
-  if (loading) return <div className="flex items-center justify-center h-64"><div className="animate-spin h-8 w-8 border-2 border-indigo-500 border-t-transparent rounded-full" /></div>
-  if (!patient) return <div className="text-center py-16 text-gray-500">Paciente no encontrado</div>
+  if (loading) return (
+    <div className="flex items-center justify-center h-64">
+      <div className="animate-spin h-8 w-8 border-2 border-[#194067] border-t-transparent rounded-full" />
+    </div>
+  )
+  if (!patient) return <div className="text-center py-16 text-[#526070] font-medium">Paciente no encontrado</div>
 
   const tabs: { key: Tab; label: string; icon: typeof Calendar }[] = [
     { key: 'overview', label: 'Resumen', icon: FileText },
@@ -95,35 +99,35 @@ export default function PatientDetailPage() {
   ]
 
   return (
-    <div>
+    <div className="space-y-6">
       {/* Header */}
-      <div className="mb-6">
-        <Link to="/terapeuta/pacientes" className="flex items-center gap-2 text-sm text-gray-500 hover:text-indigo-600 mb-4">
+      <div>
+        <Link to="/terapeuta/pacientes" className="flex items-center gap-2 text-sm text-[#526070] hover:text-[#194067] mb-4 font-medium transition-colors w-fit">
           <ArrowLeft size={16} /> Volver a pacientes
         </Link>
         <div className="flex items-start gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-indigo-100 flex items-center justify-center flex-shrink-0">
-            <span className="text-indigo-700 text-2xl font-bold">{patient.full_name[0].toUpperCase()}</span>
+          <div className="w-14 h-14 rounded-2xl bg-[#194067] flex items-center justify-center flex-shrink-0 shadow-[0_4px_12px_rgba(25,64,103,0.25)]">
+            <span className="text-white text-2xl font-bold">{patient.full_name[0].toUpperCase()}</span>
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{patient.full_name}</h1>
+            <h1 className="text-2xl font-bold text-[#0d1b2a]">{patient.full_name}</h1>
             <div className="flex flex-wrap gap-3 mt-1">
-              <span className="text-sm text-gray-500 flex items-center gap-1"><Mail size={13} />{patient.email}</span>
-              {patient.phone && <span className="text-sm text-gray-500 flex items-center gap-1"><Phone size={13} />{patient.phone}</span>}
-              {patient.birth_date && <span className="text-sm text-gray-500 flex items-center gap-1"><Cake size={13} />{format(new Date(patient.birth_date), 'd MMM yyyy', { locale: es })}</span>}
+              <span className="text-sm text-[#526070] flex items-center gap-1.5"><Mail size={13} className="text-[#8096a7]" />{patient.email}</span>
+              {patient.phone && <span className="text-sm text-[#526070] flex items-center gap-1.5"><Phone size={13} className="text-[#8096a7]" />{patient.phone}</span>}
+              {patient.birth_date && <span className="text-sm text-[#526070] flex items-center gap-1.5"><Cake size={13} className="text-[#8096a7]" />{format(new Date(patient.birth_date), 'd MMM yyyy', { locale: es })}</span>}
             </div>
           </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-gray-100 rounded-xl p-1 mb-6 overflow-x-auto">
+      <div className="flex gap-1 bg-[#f0f4f8] rounded-xl p-1 overflow-x-auto">
         {tabs.map(t => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
-            className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
-              tab === t.key ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+            className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
+              tab === t.key ? 'bg-white text-[#0d1b2a] shadow-sm' : 'text-[#526070] hover:text-[#194067]'
             }`}
           >
             <t.icon size={15} />
@@ -136,19 +140,39 @@ export default function PatientDetailPage() {
       {tab === 'overview' && (
         <div className="grid gap-4 sm:grid-cols-2">
           <Card className="p-5">
-            <h3 className="font-semibold text-gray-900 mb-3">Información</h3>
-            <div className="space-y-2 text-sm">
-              <div><span className="text-gray-500">Diagnóstico:</span><p className="text-gray-900 mt-0.5">{patient.diagnosis || 'No especificado'}</p></div>
-              <div><span className="text-gray-500">Estado:</span><Badge color={patient.status === 'active' ? 'green' : 'gray'} className="mt-0.5">{patient.status === 'active' ? 'Activo' : patient.status}</Badge></div>
-              <div><span className="text-gray-500">Notas generales:</span><p className="text-gray-900 mt-0.5">{patient.notes || 'Sin notas'}</p></div>
+            <h3 className="font-bold text-[#0d1b2a] mb-3">Información</h3>
+            <div className="space-y-3 text-sm">
+              <div>
+                <span className="text-[#8096a7] text-xs font-semibold uppercase tracking-wider">Diagnóstico</span>
+                <p className="text-[#0d1b2a] mt-0.5 font-medium">{patient.diagnosis || 'No especificado'}</p>
+              </div>
+              <div>
+                <span className="text-[#8096a7] text-xs font-semibold uppercase tracking-wider">Estado</span>
+                <div className="mt-0.5">
+                  <Badge color={patient.status === 'active' ? 'green' : 'gray'}>{patient.status === 'active' ? 'Activo' : patient.status}</Badge>
+                </div>
+              </div>
+              <div>
+                <span className="text-[#8096a7] text-xs font-semibold uppercase tracking-wider">Notas generales</span>
+                <p className="text-[#526070] mt-0.5">{patient.notes || 'Sin notas'}</p>
+              </div>
             </div>
           </Card>
           <Card className="p-5">
-            <h3 className="font-semibold text-gray-900 mb-3">Actividad reciente</h3>
-            <div className="space-y-2 text-sm text-gray-600">
-              <p><span className="font-medium">{sessions.length}</span> sesiones registradas</p>
-              <p><span className="font-medium">{assignedTests.length}</span> pruebas asignadas</p>
-              <p><span className="font-medium">{assignedTests.filter(t => t.status === 'completed').length}</span> pruebas completadas</p>
+            <h3 className="font-bold text-[#0d1b2a] mb-3">Actividad reciente</h3>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between py-2 border-b border-[#f0f4f8]">
+                <span className="text-sm text-[#526070]">Sesiones registradas</span>
+                <span className="font-bold text-[#0d1b2a]">{sessions.length}</span>
+              </div>
+              <div className="flex items-center justify-between py-2 border-b border-[#f0f4f8]">
+                <span className="text-sm text-[#526070]">Pruebas asignadas</span>
+                <span className="font-bold text-[#0d1b2a]">{assignedTests.length}</span>
+              </div>
+              <div className="flex items-center justify-between py-2">
+                <span className="text-sm text-[#526070]">Pruebas completadas</span>
+                <span className="font-bold text-emerald-600">{assignedTests.filter(t => t.status === 'completed').length}</span>
+              </div>
             </div>
           </Card>
         </div>
@@ -157,14 +181,14 @@ export default function PatientDetailPage() {
       {tab === 'notes' && (
         <div className="space-y-3">
           {sessions.length === 0 ? (
-            <Card className="p-10 text-center text-gray-400">No hay sesiones registradas</Card>
+            <Card className="p-10 text-center text-[#8096a7] font-medium">No hay sesiones registradas</Card>
           ) : (
             sessions.map(s => (
               <Card key={s.id} className="p-5">
                 <div className="flex items-start justify-between mb-3">
                   <div>
-                    <p className="font-medium text-gray-900">{format(new Date(s.scheduled_at), "d 'de' MMMM yyyy, HH:mm", { locale: es })}</p>
-                    <Badge color={s.status === 'completed' ? 'green' : s.status === 'scheduled' ? 'blue' : 'gray'} className="mt-1">
+                    <p className="font-semibold text-[#0d1b2a]">{format(new Date(s.scheduled_at), "d 'de' MMMM yyyy, HH:mm", { locale: es })}</p>
+                    <Badge color={s.status === 'completed' ? 'green' : s.status === 'scheduled' ? 'navy' : 'gray'} className="mt-1">
                       {s.status === 'completed' ? 'Completada' : s.status === 'scheduled' ? 'Programada' : 'Cancelada'}
                     </Badge>
                   </div>
@@ -172,13 +196,14 @@ export default function PatientDetailPage() {
                     variant="secondary"
                     size="sm"
                     onClick={() => { setShowNoteModal(s); setNoteText(s.notes ?? '') }}
+                    className="gap-1.5"
                   >
                     <FileText size={14} />
                     {s.notes ? 'Editar nota' : 'Agregar nota'}
                   </Button>
                 </div>
                 {s.notes && (
-                  <div className="bg-gray-50 rounded-xl p-4 text-sm text-gray-700 whitespace-pre-wrap">
+                  <div className="bg-[#f0f4f8] rounded-xl p-4 text-sm text-[#526070] whitespace-pre-wrap border border-[#dce5ec]">
                     {s.notes}
                   </div>
                 )}
@@ -191,12 +216,12 @@ export default function PatientDetailPage() {
       {tab === 'tests' && (
         <div>
           <div className="flex justify-end mb-4">
-            <Button onClick={() => setShowTestModal(true)} size="sm">
+            <Button onClick={() => setShowTestModal(true)} size="sm" className="gap-1.5">
               <Plus size={14} /> Asignar prueba
             </Button>
           </div>
           {assignedTests.length === 0 ? (
-            <Card className="p-10 text-center text-gray-400">No hay pruebas asignadas</Card>
+            <Card className="p-10 text-center text-[#8096a7] font-medium">No hay pruebas asignadas</Card>
           ) : (
             <div className="space-y-3">
               {assignedTests.map(t => {
@@ -204,14 +229,17 @@ export default function PatientDetailPage() {
                 const interp = t.score ? testDef?.interpretation(t.score) : null
                 return (
                   <Card key={t.id} className="p-4 flex items-center gap-4">
-                    <div className="flex-1">
-                      <p className="font-medium text-gray-900">{testDef?.name ?? t.test_code}</p>
-                      <p className="text-xs text-gray-500">{testDef?.description}</p>
-                      <p className="text-xs text-gray-400 mt-1">Asignado: {format(new Date(t.assigned_at), "d MMM yyyy", { locale: es })}</p>
+                    <div className="w-10 h-10 bg-[#e8f0f7] rounded-xl flex items-center justify-center flex-shrink-0">
+                      <ClipboardList size={18} className="text-[#194067]" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-[#0d1b2a]">{testDef?.name ?? t.test_code}</p>
+                      <p className="text-xs text-[#8096a7] mt-0.5">{testDef?.description}</p>
+                      <p className="text-xs text-[#8096a7] mt-0.5">Asignado: {format(new Date(t.assigned_at), "d MMM yyyy", { locale: es })}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       {interp && <Badge color={interp.color as 'green' | 'yellow' | 'red'}>{interp.label}</Badge>}
-                      <Badge color={t.status === 'completed' ? 'green' : 'yellow'}>
+                      <Badge color={t.status === 'completed' ? 'green' : 'orange'}>
                         {t.status === 'completed' ? 'Completado' : 'Pendiente'}
                       </Badge>
                       {t.status === 'completed' && (
@@ -236,16 +264,16 @@ export default function PatientDetailPage() {
       {/* Note modal */}
       <Modal open={!!showNoteModal} onClose={() => setShowNoteModal(null)} title="Nota de sesión" size="lg">
         <div className="space-y-4">
-          <p className="text-sm text-gray-500">Solo visible para el terapeuta</p>
+          <p className="text-sm text-[#8096a7]">Solo visible para el terapeuta</p>
           <textarea
             value={noteText}
             onChange={e => setNoteText(e.target.value)}
             placeholder="Escribe las notas de esta sesión..."
             rows={8}
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 resize-none"
+            className="w-full px-4 py-3 rounded-xl border border-[#dce5ec] text-sm font-medium focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10 resize-none text-[#0d1b2a] placeholder:text-[#8096a7] placeholder:font-normal"
           />
           <div className="flex gap-3">
-            <Button variant="secondary" onClick={() => setShowNoteModal(null)} className="flex-1">Cancelar</Button>
+            <Button variant="ghost" onClick={() => setShowNoteModal(null)} className="flex-1">Cancelar</Button>
             <Button onClick={saveNote} loading={savingNote} className="flex-1">Guardar nota</Button>
           </div>
         </div>
@@ -255,21 +283,21 @@ export default function PatientDetailPage() {
       <Modal open={showTestModal} onClose={() => setShowTestModal(false)} title="Asignar prueba" size="sm">
         <div className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-2 block">Selecciona la prueba</label>
+            <label className="text-sm font-semibold text-[#0d1b2a] mb-2 block">Selecciona la prueba</label>
             <div className="space-y-2">
               {Object.values(TESTS).map(t => (
-                <label key={t.code} className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${selectedTest === t.code ? 'border-indigo-400 bg-indigo-50' : 'border-gray-200 hover:border-gray-300'}`}>
-                  <input type="radio" name="test" value={t.code} checked={selectedTest === t.code} onChange={() => setSelectedTest(t.code)} className="mt-0.5" />
+                <label key={t.code} className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${selectedTest === t.code ? 'border-[#194067]/40 bg-[#e8f0f7]' : 'border-[#dce5ec] hover:border-[#194067]/20'}`}>
+                  <input type="radio" name="test" value={t.code} checked={selectedTest === t.code} onChange={() => setSelectedTest(t.code)} className="mt-0.5 accent-[#194067]" />
                   <div>
-                    <p className="font-medium text-sm text-gray-900">{t.name}</p>
-                    <p className="text-xs text-gray-500">{t.description}</p>
+                    <p className="font-semibold text-sm text-[#0d1b2a]">{t.name}</p>
+                    <p className="text-xs text-[#8096a7]">{t.description}</p>
                   </div>
                 </label>
               ))}
             </div>
           </div>
           <div className="flex gap-3">
-            <Button variant="secondary" onClick={() => setShowTestModal(false)} className="flex-1">Cancelar</Button>
+            <Button variant="ghost" onClick={() => setShowTestModal(false)} className="flex-1">Cancelar</Button>
             <Button onClick={assignTest} loading={assigningTest} disabled={!selectedTest} className="flex-1">Asignar</Button>
           </div>
         </div>
@@ -284,20 +312,24 @@ export default function PatientDetailPage() {
           return (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <p className="font-semibold text-lg">{testDef?.name}</p>
-                {interp && <Badge color={interp.color as 'green' | 'yellow' | 'red'} className="text-sm">{interp.label}</Badge>}
+                <p className="font-bold text-lg text-[#0d1b2a]">{testDef?.name}</p>
+                {interp && <Badge color={interp.color as 'green' | 'yellow' | 'red'}>{interp.label}</Badge>}
               </div>
-              {interp && <p className="text-sm text-gray-600">{interp.description}</p>}
-              <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+              {interp && (
+                <div className={`p-4 rounded-xl border ${interp.color === 'green' ? 'bg-emerald-50 border-emerald-200' : interp.color === 'yellow' ? 'bg-amber-50 border-amber-200' : 'bg-red-50 border-red-200'}`}>
+                  <p className="text-sm text-[#526070]">{interp.description}</p>
+                </div>
+              )}
+              <div className="bg-[#f0f4f8] rounded-xl p-4 space-y-2">
                 {scores && Object.entries(scores).map(([key, val]) => (
                   <div key={key} className="flex justify-between text-sm">
-                    <span className="text-gray-600 capitalize">{key}</span>
-                    <span className="font-semibold text-gray-900">{typeof val === 'number' ? Math.round(val * 100) / 100 : val}</span>
+                    <span className="text-[#526070] capitalize font-medium">{key}</span>
+                    <span className="font-bold text-[#0d1b2a]">{typeof val === 'number' ? Math.round(val * 100) / 100 : val}</span>
                   </div>
                 ))}
               </div>
               {showResultModal.completed_at && (
-                <p className="text-xs text-gray-400">Completado: {format(new Date(showResultModal.completed_at), "d 'de' MMMM yyyy, HH:mm", { locale: es })}</p>
+                <p className="text-xs text-[#8096a7]">Completado: {format(new Date(showResultModal.completed_at), "d 'de' MMMM yyyy, HH:mm", { locale: es })}</p>
               )}
             </div>
           )
@@ -320,15 +352,15 @@ function MoodChart({ patientId }: { patientId: string }) {
     load()
   }, [patientId])
 
-  if (loading) return <div className="animate-pulse h-40 bg-gray-100 rounded-2xl" />
+  if (loading) return <div className="animate-pulse h-40 bg-[#f0f4f8] rounded-2xl" />
 
   const moodColors = ['', '#ef4444', '#f97316', '#eab308', '#84cc16', '#22c55e', '#10b981', '#14b8a6', '#6366f1', '#8b5cf6', '#ec4899']
 
   return (
     <Card className="p-6">
-      <h3 className="font-semibold text-gray-900 mb-4">Estado de ánimo (últimos 30 días)</h3>
+      <h3 className="font-bold text-[#0d1b2a] mb-4">Estado de ánimo (últimos 30 días)</h3>
       {entries.length === 0 ? (
-        <p className="text-gray-400 text-center py-8">El paciente aún no ha registrado su estado de ánimo</p>
+        <p className="text-[#8096a7] text-center py-8 font-medium">El paciente aún no ha registrado su estado de ánimo</p>
       ) : (
         <div className="space-y-4">
           <div className="flex items-end gap-1.5 h-40">
@@ -338,13 +370,13 @@ function MoodChart({ patientId }: { patientId: string }) {
                   className="w-full rounded-t-lg transition-all"
                   style={{ height: `${(e.mood / 10) * 100}%`, backgroundColor: moodColors[e.mood] }}
                 />
-                <span className="text-xs text-gray-400 rotate-45 origin-left">{format(new Date(e.date), 'd/M')}</span>
+                <span className="text-xs text-[#8096a7] rotate-45 origin-left">{format(new Date(e.date), 'd/M')}</span>
               </div>
             ))}
           </div>
-          <div className="flex items-center justify-between text-xs text-gray-500">
+          <div className="flex items-center justify-between text-xs text-[#8096a7] font-medium">
             <span>Bajo (1)</span>
-            <span className="font-medium">Promedio: {(entries.reduce((s, e) => s + e.mood, 0) / entries.length).toFixed(1)}/10</span>
+            <span className="text-[#0d1b2a] font-bold">Promedio: {(entries.reduce((s, e) => s + e.mood, 0) / entries.length).toFixed(1)}/10</span>
             <span>Alto (10)</span>
           </div>
         </div>

@@ -6,11 +6,14 @@ import { Card } from '../../components/ui/Card'
 import { Button } from '../../components/ui/Button'
 import { Modal } from '../../components/ui/Modal'
 import { Plus, Trash2, Clock } from 'lucide-react'
-
-const DAYS = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+import { useLang } from '../../contexts/LangContext'
 
 export default function AvailabilityPage() {
   const { profile } = useAuth()
+  const { lang } = useLang()
+  const DAYS = lang === 'pt'
+    ? ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado']
+    : ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
   const [availability, setAvailability] = useState<Availability[]>([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
@@ -44,37 +47,40 @@ export default function AvailabilityPage() {
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
+    <div className="space-y-6">
+      <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Disponibilidad</h1>
-          <p className="text-gray-500 text-sm mt-1">Configura tus horarios disponibles para citas</p>
+          <p className="text-sm font-semibold text-[#f9a825] uppercase tracking-widest mb-1">
+            {lang === 'pt' ? 'Agenda' : 'Agenda'}
+          </p>
+          <h1 className="text-3xl font-bold text-[#0d1b2a]">{lang === 'pt' ? 'Disponibilidade' : 'Disponibilidad'}</h1>
+          <p className="text-[#526070] mt-1">{lang === 'pt' ? 'Configure seus horários disponíveis' : 'Configura tus horarios disponibles para citas'}</p>
         </div>
-        <Button onClick={() => setShowModal(true)} size="sm">
-          <Plus size={14} /> Agregar horario
+        <Button onClick={() => setShowModal(true)} size="sm" className="mt-1 gap-2">
+          <Plus size={14} /> {lang === 'pt' ? 'Adicionar' : 'Agregar horario'}
         </Button>
       </div>
 
       {loading ? (
-        <div className="grid gap-4">{[1,2,3].map(i => <div key={i} className="h-24 bg-white rounded-2xl animate-pulse" />)}</div>
+        <div className="grid gap-4">{[1,2,3].map(i => <div key={i} className="h-20 bg-white rounded-2xl animate-pulse border border-[#dce5ec]" />)}</div>
       ) : (
         <div className="grid gap-3">
           {DAYS.map((name, idx) => {
             const slots = availability.filter(a => a.day_of_week === idx)
             if (idx === 0 || idx === 6) return null
             return (
-              <Card key={idx} className="p-4">
-                <div className="flex items-center justify-between">
-                  <p className="font-medium text-gray-900 w-28">{name}</p>
+              <Card key={idx} className="p-5">
+                <div className="flex items-center gap-4 flex-wrap">
+                  <p className="font-bold text-[#0d1b2a] w-28 flex-shrink-0">{name}</p>
                   {slots.length === 0 ? (
-                    <p className="text-sm text-gray-400 flex-1">Sin horarios</p>
+                    <p className="text-sm text-[#8096a7]">{lang === 'pt' ? 'Sem horários' : 'Sin horarios'}</p>
                   ) : (
-                    <div className="flex flex-wrap gap-2 flex-1">
+                    <div className="flex flex-wrap gap-2">
                       {slots.map(s => (
-                        <div key={s.id} className="flex items-center gap-2 bg-indigo-50 border border-indigo-100 rounded-xl px-3 py-1.5">
-                          <Clock size={13} className="text-indigo-500" />
-                          <span className="text-sm font-medium text-indigo-700">{s.start_time.slice(0,5)} - {s.end_time.slice(0,5)}</span>
-                          <button onClick={() => deleteSlot(s.id)} className="text-red-400 hover:text-red-600 ml-1">
+                        <div key={s.id} className="flex items-center gap-2 bg-[#e8f0f7] border border-[#194067]/20 rounded-xl px-3 py-2">
+                          <Clock size={13} className="text-[#f9a825]" />
+                          <span className="text-sm font-semibold text-[#194067]">{s.start_time.slice(0,5)} – {s.end_time.slice(0,5)}</span>
+                          <button onClick={() => deleteSlot(s.id)} className="text-[#8096a7] hover:text-red-500 ml-1 transition-colors">
                             <Trash2 size={13} />
                           </button>
                         </div>
@@ -88,33 +94,33 @@ export default function AvailabilityPage() {
         </div>
       )}
 
-      <Modal open={showModal} onClose={() => setShowModal(false)} title="Agregar horario disponible" size="sm">
+      <Modal open={showModal} onClose={() => setShowModal(false)} title={lang === 'pt' ? 'Adicionar horário disponível' : 'Agregar horario disponible'} size="sm">
         <div className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">Día de la semana</label>
+            <label className="text-sm font-semibold text-[#0d1b2a] mb-1.5 block">{lang === 'pt' ? 'Dia da semana' : 'Día de la semana'}</label>
             <select
               value={form.day_of_week}
               onChange={e => setForm(f => ({ ...f, day_of_week: parseInt(e.target.value) }))}
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-indigo-400 bg-white"
+              className="w-full px-4 py-3 rounded-xl border border-[#dce5ec] text-sm font-medium focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10 bg-white text-[#0d1b2a]"
             >
               {DAYS.slice(1, 6).map((d, i) => <option key={i+1} value={i+1}>{d}</option>)}
             </select>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1 block">Hora inicio</label>
+              <label className="text-sm font-semibold text-[#0d1b2a] mb-1.5 block">{lang === 'pt' ? 'Hora início' : 'Hora inicio'}</label>
               <input type="time" value={form.start_time} onChange={e => setForm(f => ({ ...f, start_time: e.target.value }))}
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-indigo-400" />
+                className="w-full px-4 py-3 rounded-xl border border-[#dce5ec] text-sm font-medium focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10" />
             </div>
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1 block">Hora fin</label>
+              <label className="text-sm font-semibold text-[#0d1b2a] mb-1.5 block">{lang === 'pt' ? 'Hora fim' : 'Hora fin'}</label>
               <input type="time" value={form.end_time} onChange={e => setForm(f => ({ ...f, end_time: e.target.value }))}
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-indigo-400" />
+                className="w-full px-4 py-3 rounded-xl border border-[#dce5ec] text-sm font-medium focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10" />
             </div>
           </div>
-          <div className="flex gap-3">
-            <Button variant="secondary" onClick={() => setShowModal(false)} className="flex-1">Cancelar</Button>
-            <Button onClick={addSlot} loading={saving} className="flex-1">Guardar</Button>
+          <div className="flex gap-3 pt-1">
+            <Button variant="ghost" onClick={() => setShowModal(false)} className="flex-1">{lang === 'pt' ? 'Cancelar' : 'Cancelar'}</Button>
+            <Button onClick={addSlot} loading={saving} className="flex-1">{lang === 'pt' ? 'Salvar' : 'Guardar'}</Button>
           </div>
         </div>
       </Modal>

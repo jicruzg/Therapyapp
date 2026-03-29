@@ -37,20 +37,23 @@ export default function TherapistTestsPage() {
   const filtered = tests.filter(t => filter === 'all' ? true : t.status === filter)
 
   return (
-    <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Pruebas asignadas</h1>
-        <p className="text-gray-500 text-sm mt-1">Seguimiento de todas las pruebas psicológicas</p>
+    <div className="space-y-6">
+      <div>
+        <p className="text-sm font-semibold text-[#f9a825] uppercase tracking-widest mb-1">Seguimiento</p>
+        <h1 className="text-3xl font-bold text-[#0d1b2a]">Pruebas psicológicas</h1>
+        <p className="text-[#526070] mt-1">Seguimiento de todas las pruebas asignadas</p>
       </div>
 
       {/* Filter */}
-      <div className="flex gap-2 mb-6">
+      <div className="flex gap-2">
         {(['all', 'pending', 'completed'] as const).map(f => (
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-              filter === f ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:border-indigo-300'
+            className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
+              filter === f
+                ? 'bg-[#194067] text-white shadow-sm'
+                : 'bg-white text-[#526070] border border-[#dce5ec] hover:border-[#194067]/40'
             }`}
           >
             {f === 'all' ? 'Todas' : f === 'pending' ? 'Pendientes' : 'Completadas'}
@@ -59,11 +62,13 @@ export default function TherapistTestsPage() {
       </div>
 
       {loading ? (
-        <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-20 bg-white rounded-2xl animate-pulse" />)}</div>
+        <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-20 bg-white rounded-2xl animate-pulse border border-[#dce5ec]" />)}</div>
       ) : filtered.length === 0 ? (
-        <Card className="p-12 text-center">
-          <ClipboardList size={48} className="text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500">No hay pruebas {filter !== 'all' ? (filter === 'pending' ? 'pendientes' : 'completadas') : ''}</p>
+        <Card className="p-14 text-center">
+          <div className="w-16 h-16 bg-[#f0f4f8] rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <ClipboardList size={28} className="text-[#8096a7]" />
+          </div>
+          <p className="text-[#526070] font-medium">No hay pruebas {filter !== 'all' ? (filter === 'pending' ? 'pendientes' : 'completadas') : ''}</p>
         </Card>
       ) : (
         <div className="space-y-3">
@@ -71,24 +76,24 @@ export default function TherapistTestsPage() {
             const testDef = TESTS[t.test_code]
             const interp = t.score ? testDef?.interpretation(t.score) : null
             return (
-              <Card key={t.id} className="p-4">
+              <Card key={t.id} className="p-5">
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <ClipboardList size={18} className="text-indigo-600" />
+                  <div className="w-11 h-11 bg-[#e8f0f7] rounded-xl flex items-center justify-center flex-shrink-0">
+                    <ClipboardList size={20} className="text-[#194067]" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <p className="font-medium text-gray-900">{testDef?.name ?? t.test_code}</p>
-                      <Badge color={t.status === 'completed' ? 'green' : 'yellow'}>
+                      <p className="font-semibold text-[#0d1b2a]">{testDef?.name ?? t.test_code}</p>
+                      <Badge color={t.status === 'completed' ? 'green' : 'orange'}>
                         {t.status === 'completed' ? 'Completado' : 'Pendiente'}
                       </Badge>
                       {interp && <Badge color={interp.color as 'green' | 'yellow' | 'red'}>{interp.label}</Badge>}
                     </div>
-                    <p className="text-sm text-gray-500 mt-0.5">{t.patient?.full_name}</p>
-                    <p className="text-xs text-gray-400">{format(new Date(t.assigned_at), "d MMM yyyy", { locale: es })}</p>
+                    <p className="text-sm text-[#526070] mt-0.5 font-medium">{t.patient?.full_name}</p>
+                    <p className="text-xs text-[#8096a7]">{format(new Date(t.assigned_at), "d MMM yyyy", { locale: es })}</p>
                   </div>
                   {t.status === 'completed' && (
-                    <Button variant="secondary" size="sm" onClick={() => setShowResult(t)}>
+                    <Button variant="outline" size="sm" onClick={() => setShowResult(t)} className="gap-1.5 flex-shrink-0">
                       <Eye size={14} /> Ver resultado
                     </Button>
                   )}
@@ -99,7 +104,6 @@ export default function TherapistTestsPage() {
         </div>
       )}
 
-      {/* Result modal */}
       <Modal open={!!showResult} onClose={() => setShowResult(null)} title="Resultado de prueba" size="md">
         {showResult && (() => {
           const testDef = TESTS[showResult.test_code]
@@ -108,26 +112,26 @@ export default function TherapistTestsPage() {
           return (
             <div className="space-y-4">
               <div>
-                <p className="text-lg font-semibold">{testDef?.name}</p>
-                <p className="text-sm text-gray-500">Paciente: {showResult.patient?.full_name}</p>
+                <p className="text-lg font-bold text-[#0d1b2a]">{testDef?.name}</p>
+                <p className="text-sm text-[#526070]">Paciente: {showResult.patient?.full_name}</p>
               </div>
               {interp && (
-                <div className={`p-4 rounded-xl ${interp.color === 'green' ? 'bg-green-50' : interp.color === 'yellow' ? 'bg-yellow-50' : 'bg-red-50'}`}>
-                  <div className="flex items-center gap-2 mb-1">
-                    <Badge color={interp.color as 'green' | 'yellow' | 'red'}>{interp.label}</Badge>
-                  </div>
-                  <p className="text-sm text-gray-700">{interp.description}</p>
+                <div className={`p-4 rounded-xl border ${interp.color === 'green' ? 'bg-emerald-50 border-emerald-200' : interp.color === 'yellow' ? 'bg-amber-50 border-amber-200' : 'bg-red-50 border-red-200'}`}>
+                  <Badge color={interp.color as 'green' | 'yellow' | 'red'} className="mb-2">{interp.label}</Badge>
+                  <p className="text-sm text-[#0d1b2a]">{interp.description}</p>
                 </div>
               )}
-              <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+              <div className="bg-[#f0f4f8] rounded-xl p-4 space-y-2">
                 {scores && Object.entries(scores).map(([k, v]) => (
                   <div key={k} className="flex justify-between text-sm">
-                    <span className="text-gray-600 capitalize">{k}</span>
-                    <span className="font-semibold">{typeof v === 'number' ? Math.round(v * 100) / 100 : v}</span>
+                    <span className="text-[#526070] capitalize font-medium">{k}</span>
+                    <span className="font-bold text-[#0d1b2a]">{typeof v === 'number' ? Math.round(v * 100) / 100 : v}</span>
                   </div>
                 ))}
               </div>
-              {showResult.completed_at && <p className="text-xs text-gray-400">Completado: {format(new Date(showResult.completed_at), "d 'de' MMMM yyyy, HH:mm", { locale: es })}</p>}
+              {showResult.completed_at && (
+                <p className="text-xs text-[#8096a7]">Completado: {format(new Date(showResult.completed_at), "d 'de' MMMM yyyy, HH:mm", { locale: es })}</p>
+              )}
             </div>
           )
         })()}

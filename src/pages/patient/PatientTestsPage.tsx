@@ -55,7 +55,11 @@ export default function PatientTestsPage() {
     setShowResult(data)
   }
 
-  if (loading) return <div className="flex items-center justify-center h-64"><div className="animate-spin h-8 w-8 border-2 border-indigo-500 border-t-transparent rounded-full" /></div>
+  if (loading) return (
+    <div className="flex items-center justify-center h-64">
+      <div className="animate-spin h-8 w-8 border-2 border-[#194067] border-t-transparent rounded-full" />
+    </div>
+  )
 
   const pending = tests.filter(t => t.status === 'pending')
   const completed = tests.filter(t => t.status === 'completed')
@@ -70,39 +74,40 @@ export default function PatientTestsPage() {
     return (
       <div className="max-w-2xl mx-auto">
         <div className="mb-6">
-          <button onClick={() => { setActiveTest(null); setAnswers({}) }} className="text-sm text-gray-500 hover:text-indigo-600 mb-3 flex items-center gap-1">
+          <button onClick={() => { setActiveTest(null); setAnswers({}) }} className="text-sm text-[#526070] hover:text-[#194067] mb-3 flex items-center gap-1 font-medium transition-colors">
             ← Volver
           </button>
-          <h1 className="text-2xl font-bold text-gray-900">{testDef.name}</h1>
-          <p className="text-gray-500 text-sm mt-1">{testDef.description}</p>
+          <p className="text-sm font-semibold text-[#f9a825] uppercase tracking-widest mb-1">Evaluación</p>
+          <h1 className="text-2xl font-bold text-[#0d1b2a]">{testDef.name}</h1>
+          <p className="text-[#526070] text-sm mt-1">{testDef.description}</p>
         </div>
 
-        <Card className="p-4 mb-4">
-          <p className="text-sm text-gray-600 italic">{testDef.instructions}</p>
+        <Card className="p-4 mb-4 bg-[#e8f0f7] border-[#194067]/20">
+          <p className="text-sm text-[#526070] italic">{testDef.instructions}</p>
         </Card>
 
         {/* Progress */}
         <div className="mb-6">
-          <div className="flex justify-between text-xs text-gray-500 mb-1">
+          <div className="flex justify-between text-xs text-[#8096a7] mb-1.5 font-medium">
             <span>{Object.keys(answers).length}/{testDef.questions.length} preguntas</span>
-            <span>{progress}%</span>
+            <span className="text-[#f9a825] font-bold">{progress}%</span>
           </div>
-          <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-            <div className="h-full bg-indigo-600 rounded-full transition-all" style={{ width: `${progress}%` }} />
+          <div className="h-2 bg-[#f0f4f8] rounded-full overflow-hidden">
+            <div className="h-full bg-[#194067] rounded-full transition-all" style={{ width: `${progress}%` }} />
           </div>
         </div>
 
         <div className="space-y-5">
           {testDef.questions.map((q, idx) => (
-            <Card key={q.id} className={`p-5 ${answers[q.id] !== undefined ? 'border-indigo-200' : ''}`}>
-              <p className="text-sm font-medium text-gray-900 mb-4">
-                <span className="text-indigo-500 font-bold mr-2">{idx + 1}.</span>
+            <Card key={q.id} className={`p-5 ${answers[q.id] !== undefined ? 'border-[#194067]/30' : ''}`}>
+              <p className="text-sm font-medium text-[#0d1b2a] mb-4">
+                <span className="text-[#f9a825] font-bold mr-2">{idx + 1}.</span>
                 {q.text}
               </p>
               <div className="space-y-2">
                 {q.options.map(opt => (
                   <label key={opt.value} className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all border ${
-                    answers[q.id] === opt.value ? 'bg-indigo-50 border-indigo-300' : 'border-gray-100 hover:border-gray-200'
+                    answers[q.id] === opt.value ? 'bg-[#e8f0f7] border-[#194067]/30' : 'border-[#dce5ec] hover:border-[#194067]/20'
                   }`}>
                     <input
                       type="radio"
@@ -110,9 +115,9 @@ export default function PatientTestsPage() {
                       value={opt.value}
                       checked={answers[q.id] === opt.value}
                       onChange={() => setAnswers(prev => ({ ...prev, [q.id]: opt.value }))}
-                      className="accent-indigo-600"
+                      className="accent-[#194067]"
                     />
-                    <span className="text-sm text-gray-700">{opt.label}</span>
+                    <span className="text-sm text-[#526070]">{opt.label}</span>
                   </label>
                 ))}
               </div>
@@ -124,36 +129,37 @@ export default function PatientTestsPage() {
           <Button onClick={submitTest} loading={submitting} disabled={!allAnswered} className="w-full" size="lg">
             Enviar respuestas
           </Button>
-          {!allAnswered && <p className="text-xs text-center text-gray-400 mt-2">Responde todas las preguntas para continuar</p>}
+          {!allAnswered && <p className="text-xs text-center text-[#8096a7] mt-2">Responde todas las preguntas para continuar</p>}
         </div>
       </div>
     )
   }
 
   return (
-    <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Pruebas</h1>
-        <p className="text-gray-500 text-sm mt-1">Evaluaciones asignadas por tu terapeuta</p>
+    <div className="space-y-6">
+      <div>
+        <p className="text-sm font-semibold text-[#f9a825] uppercase tracking-widest mb-1">Evaluaciones</p>
+        <h1 className="text-3xl font-bold text-[#0d1b2a]">Pruebas</h1>
+        <p className="text-[#526070] mt-1">Evaluaciones asignadas por tu terapeuta</p>
       </div>
 
       {pending.length > 0 && (
-        <div className="mb-6">
-          <h2 className="font-semibold text-gray-700 mb-3">Pendientes</h2>
+        <div>
+          <h2 className="font-semibold text-[#526070] mb-3 text-sm uppercase tracking-wider">Pendientes</h2>
           <div className="space-y-3">
             {pending.map(t => {
               const testDef = TESTS[t.test_code]
               return (
-                <Card key={t.id} className="p-4 border-l-4 border-amber-400">
+                <Card key={t.id} className="p-4 border-l-4 border-[#f9a825]">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <ClipboardList size={18} className="text-amber-600" />
+                    <div className="w-10 h-10 bg-[#fff8e1] rounded-xl flex items-center justify-center flex-shrink-0">
+                      <ClipboardList size={18} className="text-[#e6971a]" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-gray-900">{testDef?.name ?? t.test_code}</p>
-                      <p className="text-xs text-gray-500">{testDef?.description}</p>
+                      <p className="font-semibold text-[#0d1b2a]">{testDef?.name ?? t.test_code}</p>
+                      <p className="text-xs text-[#8096a7] mt-0.5">{testDef?.description}</p>
                     </div>
-                    <Button onClick={() => { setActiveTest(t); setAnswers({}) }} size="sm">
+                    <Button onClick={() => { setActiveTest(t); setAnswers({}) }} size="sm" className="gap-1.5 flex-shrink-0">
                       Responder <ChevronRight size={14} />
                     </Button>
                   </div>
@@ -166,7 +172,7 @@ export default function PatientTestsPage() {
 
       {completed.length > 0 && (
         <div>
-          <h2 className="font-semibold text-gray-700 mb-3">Completadas</h2>
+          <h2 className="font-semibold text-[#526070] mb-3 text-sm uppercase tracking-wider">Completadas</h2>
           <div className="space-y-3">
             {completed.map(t => {
               const testDef = TESTS[t.test_code]
@@ -174,12 +180,12 @@ export default function PatientTestsPage() {
               return (
                 <Card key={t.id} className="p-4">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <CheckCircle size={18} className="text-green-600" />
+                    <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <CheckCircle size={18} className="text-emerald-500" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-gray-900">{testDef?.name ?? t.test_code}</p>
-                      {t.completed_at && <p className="text-xs text-gray-400">{format(new Date(t.completed_at), "d 'de' MMMM yyyy", { locale: es })}</p>}
+                      <p className="font-semibold text-[#0d1b2a]">{testDef?.name ?? t.test_code}</p>
+                      {t.completed_at && <p className="text-xs text-[#8096a7] mt-0.5">{format(new Date(t.completed_at), "d 'de' MMMM yyyy", { locale: es })}</p>}
                     </div>
                     {interp && <Badge color={interp.color as 'green' | 'yellow' | 'red'}>{interp.label}</Badge>}
                     <Button variant="secondary" size="sm" onClick={() => setShowResult(t)}>Ver</Button>
@@ -192,9 +198,11 @@ export default function PatientTestsPage() {
       )}
 
       {tests.length === 0 && (
-        <Card className="p-12 text-center">
-          <ClipboardList size={48} className="text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500">No tienes pruebas asignadas por el momento</p>
+        <Card className="p-14 text-center">
+          <div className="w-16 h-16 bg-[#f0f4f8] rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <ClipboardList size={28} className="text-[#8096a7]" />
+          </div>
+          <p className="text-[#526070] font-medium">No tienes pruebas asignadas por el momento</p>
         </Card>
       )}
 
@@ -207,17 +215,19 @@ export default function PatientTestsPage() {
           return (
             <div className="space-y-4">
               <div className="text-center">
-                <CheckCircle size={48} className="text-green-500 mx-auto mb-3" />
-                <p className="text-xl font-semibold text-gray-900">¡Prueba completada!</p>
-                <p className="text-sm text-gray-500 mt-1">{testDef?.name}</p>
+                <div className="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <CheckCircle size={32} className="text-emerald-500" />
+                </div>
+                <p className="text-xl font-bold text-[#0d1b2a]">¡Prueba completada!</p>
+                <p className="text-sm text-[#526070] mt-1">{testDef?.name}</p>
               </div>
               {interp && (
-                <div className={`p-4 rounded-xl text-center ${interp.color === 'green' ? 'bg-green-50' : interp.color === 'yellow' ? 'bg-yellow-50' : 'bg-red-50'}`}>
-                  <Badge color={interp.color as 'green' | 'yellow' | 'red'} className="text-sm mb-2">{interp.label}</Badge>
-                  <p className="text-sm text-gray-600">{interp.description}</p>
+                <div className={`p-4 rounded-xl text-center border ${interp.color === 'green' ? 'bg-emerald-50 border-emerald-200' : interp.color === 'yellow' ? 'bg-amber-50 border-amber-200' : 'bg-red-50 border-red-200'}`}>
+                  <Badge color={interp.color as 'green' | 'yellow' | 'red'} className="mb-2">{interp.label}</Badge>
+                  <p className="text-sm text-[#526070]">{interp.description}</p>
                 </div>
               )}
-              <p className="text-xs text-center text-gray-400">Tu terapeuta podrá ver estos resultados para darte un mejor seguimiento.</p>
+              <p className="text-xs text-center text-[#8096a7]">Tu terapeuta podrá ver estos resultados para darte un mejor seguimiento.</p>
               <Button onClick={() => setShowResult(null)} className="w-full">Cerrar</Button>
             </div>
           )

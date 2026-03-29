@@ -1,27 +1,27 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
+import { useLang } from '../../contexts/LangContext'
 import { supabase } from '../../lib/supabase'
 import { Card } from '../../components/ui/Card'
 import { Badge } from '../../components/ui/Badge'
-import { Calendar, ClipboardList, Smile, BookOpen, Bell } from 'lucide-react'
+import { Calendar, ClipboardList, Activity, BookOpen, Bell, ArrowRight, Clock } from 'lucide-react'
 import { format, isToday, isTomorrow } from 'date-fns'
-import { es } from 'date-fns/locale'
+import { es, ptBR } from 'date-fns/locale'
 
 export default function PatientHome() {
   const { profile } = useAuth()
-  const [_patientId, setPatientId] = useState<string | null>(null)
+  const { t, lang } = useLang()
+  const locale = lang === 'pt' ? ptBR : es
   const [nextSession, setNextSession] = useState<{ scheduled_at: string } | null>(null)
   const [pendingTests, setPendingTests] = useState(0)
   const [notifications, setNotifications] = useState<{ id: string; title: string; type: string; read: boolean }[]>([])
-  const [_loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function load() {
       if (!profile) return
       const { data: patient } = await supabase.from('patients').select('id').eq('profile_id', profile.id).single()
-      if (!patient) { setLoading(false); return }
-      setPatientId(patient.id)
+      if (!patient) return
       const [sessionRes, testsRes, notifRes] = await Promise.all([
         supabase.from('sessions').select('scheduled_at').eq('patient_id', patient.id).eq('status', 'scheduled').gte('scheduled_at', new Date().toISOString()).order('scheduled_at').limit(1),
         supabase.from('assigned_tests').select('id', { count: 'exact' }).eq('patient_id', patient.id).eq('status', 'pending'),
@@ -30,62 +30,78 @@ export default function PatientHome() {
       setNextSession(sessionRes.data?.[0] ?? null)
       setPendingTests(testsRes.count ?? 0)
       setNotifications(notifRes.data ?? [])
-      setLoading(false)
     }
     load()
   }, [profile])
 
   const hour = new Date().getHours()
-  const greeting = hour < 12 ? 'Buenos días' : hour < 18 ? 'Buenas tardes' : 'Buenas noches'
+  const greeting = hour < 12 ? t('good_morning') : hour < 18 ? t('good_afternoon') : t('good_evening')
+  const firstName = profile?.full_name?.split(' ')[0] ?? ''
 
   function getSessionLabel(dateStr: string) {
     const d = new Date(dateStr)
-    if (isToday(d)) return `Hoy a las ${format(d, 'HH:mm')}`
-    if (isTomorrow(d)) return `Mañana a las ${format(d, 'HH:mm')}`
-    return format(d, "d 'de' MMMM 'a las' HH:mm", { locale: es })
+    if (isToday(d)) return `${t('today')}, ${format(d, 'HH:mm')}`
+    if (isTomorrow(d)) return `${t('tomorrow')}, ${format(d, 'HH:mm')}`
+    return format(d, "d 'de' MMMM, HH:mm", { locale })
   }
 
   const quickLinks = [
-    { to: '/paciente/citas', icon: Calendar, label: 'Mis Citas', color: 'bg-blue-100', iconColor: 'text-blue-600' },
-    { to: '/paciente/pruebas', icon: ClipboardList, label: 'Pruebas', color: 'bg-amber-100', iconColor: 'text-amber-600', badge: pendingTests },
-    { to: '/paciente/estado-animo', icon: Smile, label: 'Estado de Ánimo', color: 'bg-green-100', iconColor: 'text-green-600' },
-    { to: '/paciente/recursos', icon: BookOpen, label: 'Recursos', color: 'bg-purple-100', iconColor: 'text-purple-600' },
+    { to: '/paciente/citas', icon: Calendar, label: t('nav_my_appointments'), accent: '#194067', bg: '#e8f0f7' },
+    { to: '/paciente/pruebas', icon: ClipboardList, label: t('nav_tests'), accent: '#e6971a', bg: '#fff8e1', badge: pendingTests },
+    { to: '/paciente/estado-animo', icon: Activity, label: t('nav_mood'), accent: '#059669', bg: '#d1fae5' },
+    { to: '/paciente/recursos', icon: BookOpen, label: t('nav_resources'), accent: '#7c3aed', bg: '#ede9fe' },
   ]
 
+  const notifTypeLabel: Record<string, string> = {
+    test: lang === 'pt' ? 'Avaliação' : 'Prueba',
+    appointment: lang === 'pt' ? 'Consulta' : 'Cita',
+    general: lang === 'pt' ? 'Geral' : 'General',
+  }
+
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">{greeting}, {profile?.full_name?.split(' ')[0]}</h1>
-        <p className="text-gray-500 mt-1">Bienvenido/a a tu espacio de bienestar</p>
+    <div className="space-y-8">
+      {/* Header */}
+      <div>
+        <p className="text-sm font-semibold text-[#f9a825] uppercase tracking-widest mb-1">{greeting}</p>
+        <h1 className="text-3xl font-bold text-[#0d1b2a]">{firstName}</h1>
+        <p className="text-[#526070] mt-1">{t('patient_subtitle')}</p>
       </div>
 
-      {/* Next session */}
+      {/* Next session banner */}
       {nextSession && (
-        <Card className="p-5 mb-6 border-l-4 border-indigo-500">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
-              <Calendar size={20} className="text-indigo-600" />
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-900">Próxima cita</p>
-              <p className="text-indigo-600 font-semibold">{getSessionLabel(nextSession.scheduled_at)}</p>
-            </div>
+        <div className="bg-[#194067] rounded-2xl p-5 flex items-center gap-4 shadow-[0_4px_24px_rgba(25,64,103,0.2)]">
+          <div className="w-12 h-12 bg-[#f9a825] rounded-xl flex items-center justify-center flex-shrink-0">
+            <Calendar size={22} className="text-[#0d1b2a]" />
           </div>
-        </Card>
+          <div className="flex-1 min-w-0">
+            <p className="text-white/70 text-sm font-medium">{t('next_appointment')}</p>
+            <p className="text-white font-bold text-lg leading-tight">{getSessionLabel(nextSession.scheduled_at)}</p>
+          </div>
+          <Link to="/paciente/citas" className="flex-shrink-0">
+            <div className="w-9 h-9 bg-white/15 hover:bg-white/25 rounded-xl flex items-center justify-center transition-colors">
+              <ArrowRight size={18} className="text-white" />
+            </div>
+          </Link>
+        </div>
       )}
 
-      {/* Quick links */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+      {/* Quick links grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {quickLinks.map(link => (
-          <Link key={link.to} to={link.to}>
-            <Card className="p-4 text-center hover:shadow-md transition-shadow relative">
+          <Link key={link.to} to={link.to} className="group">
+            <Card hover className="p-5 text-center relative transition-all duration-200">
               {link.badge ? (
-                <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">{link.badge}</span>
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold shadow-sm z-10">
+                  {link.badge}
+                </span>
               ) : null}
-              <div className={`w-12 h-12 ${link.color} rounded-2xl flex items-center justify-center mx-auto mb-3`}>
-                <link.icon size={22} className={link.iconColor} />
+              <div
+                className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-200"
+                style={{ background: link.bg }}
+              >
+                <link.icon size={24} style={{ color: link.accent }} />
               </div>
-              <p className="text-sm font-medium text-gray-700">{link.label}</p>
+              <p className="text-sm font-semibold text-[#0d1b2a] leading-tight">{link.label}</p>
             </Card>
           </Link>
         ))}
@@ -93,21 +109,42 @@ export default function PatientHome() {
 
       {/* Notifications */}
       {notifications.length > 0 && (
-        <Card className="p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-gray-900 flex items-center gap-2">
-              <Bell size={18} className="text-indigo-500" /> Notificaciones
-            </h2>
-            <Link to="/paciente/notificaciones" className="text-sm text-indigo-600 hover:underline">Ver todas</Link>
+        <Card className="overflow-hidden">
+          <div className="flex items-center justify-between px-6 py-5 border-b border-[#f0f4f8]">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 bg-[#fff8e1] rounded-xl flex items-center justify-center">
+                <Bell size={18} className="text-[#e6971a]" />
+              </div>
+              <h2 className="font-bold text-[#0d1b2a]">{t('nav_notifications')}</h2>
+              <span className="bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                {notifications.length}
+              </span>
+            </div>
+            <Link to="/paciente/notificaciones" className="text-sm font-semibold text-[#194067] hover:text-[#f9a825] transition-colors flex items-center gap-1">
+              {t('see_all')} <ArrowRight size={14} />
+            </Link>
           </div>
-          <div className="space-y-3">
+          <div className="divide-y divide-[#f0f4f8]">
             {notifications.map(n => (
-              <div key={n.id} className="flex items-center gap-3 p-3 rounded-xl bg-indigo-50">
-                <Badge color="indigo">{n.type === 'test' ? 'Prueba' : n.type === 'appointment' ? 'Cita' : 'General'}</Badge>
-                <p className="text-sm text-gray-700 flex-1">{n.title}</p>
+              <div key={n.id} className="flex items-center gap-4 px-6 py-4 hover:bg-[#f8fafc] transition-colors">
+                <Badge color={n.type === 'test' ? 'orange' : n.type === 'appointment' ? 'navy' : 'gray'}>
+                  {notifTypeLabel[n.type] ?? n.type}
+                </Badge>
+                <p className="text-sm text-[#0d1b2a] font-medium flex-1">{n.title}</p>
               </div>
             ))}
           </div>
+        </Card>
+      )}
+
+      {/* Empty state when no session and no notifications */}
+      {!nextSession && notifications.length === 0 && (
+        <Card className="p-10 text-center">
+          <div className="w-16 h-16 bg-[#e8f0f7] rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <Clock size={28} className="text-[#194067]" />
+          </div>
+          <p className="font-semibold text-[#0d1b2a] mb-1">Todo al día</p>
+          <p className="text-sm text-[#526070]">No tienes citas ni notificaciones pendientes.</p>
         </Card>
       )}
     </div>

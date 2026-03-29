@@ -44,42 +44,47 @@ export default function NotificationsPage() {
   }
 
   return (
-    <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Notificaciones</h1>
-        <p className="text-gray-500 text-sm mt-1">{notifications.filter(n => !n.read).length} sin leer</p>
+    <div className="space-y-6">
+      <div>
+        <p className="text-sm font-semibold text-[#f9a825] uppercase tracking-widest mb-1">Bandeja</p>
+        <h1 className="text-3xl font-bold text-[#0d1b2a]">Notificaciones</h1>
+        <p className="text-[#526070] mt-1">{notifications.filter(n => !n.read).length} sin leer</p>
       </div>
 
       {loading ? (
-        <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-20 bg-white rounded-2xl animate-pulse" />)}</div>
+        <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-20 bg-white rounded-2xl animate-pulse border border-[#dce5ec]" />)}</div>
       ) : notifications.length === 0 ? (
-        <Card className="p-12 text-center">
-          <Bell size={48} className="text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500">No tienes notificaciones</p>
+        <Card className="p-14 text-center">
+          <div className="w-16 h-16 bg-[#f0f4f8] rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <Bell size={28} className="text-[#8096a7]" />
+          </div>
+          <p className="text-[#526070] font-medium">No tienes notificaciones</p>
         </Card>
       ) : (
-        <div className="space-y-3">
-          {notifications.map(n => (
-            <Card key={n.id} className={`p-4 ${!n.read ? 'border-indigo-200 bg-indigo-50/30' : ''}`}>
-              <div className="flex items-start gap-3">
-                <div className="w-9 h-9 bg-white rounded-xl flex items-center justify-center border border-gray-100 flex-shrink-0">
+        <Card className="overflow-hidden">
+          <div className="divide-y divide-[#f0f4f8]">
+            {notifications.map(n => (
+              <div key={n.id} className={`flex items-start gap-4 px-5 py-4 hover:bg-[#f8fafc] transition-colors ${!n.read ? 'bg-[#fff8e1]/40' : ''}`}>
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                  n.type === 'test' ? 'bg-[#fff8e1]' : n.type === 'appointment' ? 'bg-[#e8f0f7]' : 'bg-[#f0f4f8]'
+                }`}>
                   {typeIcon(n.type)}
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap mb-1">
-                    <p className="font-medium text-gray-900 text-sm">{n.title}</p>
+                    <p className="font-semibold text-[#0d1b2a] text-sm">{n.title}</p>
                     <Badge color={typeColor(n.type)}>
                       {n.type === 'test' ? 'Prueba' : n.type === 'appointment' ? 'Cita' : 'General'}
                     </Badge>
-                    {!n.read && <span className="w-2 h-2 bg-indigo-500 rounded-full" />}
+                    {!n.read && <span className="w-2 h-2 bg-[#f9a825] rounded-full" />}
                   </div>
-                  <p className="text-sm text-gray-600">{n.message}</p>
-                  <p className="text-xs text-gray-400 mt-1">{format(new Date(n.created_at), "d 'de' MMMM yyyy, HH:mm", { locale: es })}</p>
+                  <p className="text-sm text-[#526070]">{n.message}</p>
+                  <p className="text-xs text-[#8096a7] mt-1.5 font-medium">{format(new Date(n.created_at), "d 'de' MMMM yyyy, HH:mm", { locale: es })}</p>
                 </div>
               </div>
-            </Card>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Card>
       )}
     </div>
   )

@@ -4,20 +4,29 @@ import type { InputHTMLAttributes } from 'react'
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string
   error?: string
+  hint?: string
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ label, error, className = '', ...props }, ref) {
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+  { label, error, hint, className = '', ...props }, ref
+) {
   return (
-    <div className="flex flex-col gap-1">
-      {label && <label className="text-sm font-medium text-gray-700">{label}</label>}
+    <div className="flex flex-col gap-1.5">
+      {label && (
+        <label className="text-sm font-semibold text-[#0d1b2a]">{label}</label>
+      )}
       <input
         ref={ref}
-        className={`w-full px-4 py-2.5 rounded-xl border text-sm transition-all outline-none
-          ${error ? 'border-red-400 focus:ring-2 focus:ring-red-200' : 'border-gray-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100'}
-          bg-white placeholder:text-gray-400 ${className}`}
+        className={`w-full px-4 py-3 rounded-xl border text-sm font-medium transition-all duration-200 outline-none
+          ${error
+            ? 'border-red-400 bg-red-50 focus:ring-2 focus:ring-red-200 focus:border-red-400'
+            : 'border-[#dce5ec] bg-white focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10'
+          }
+          placeholder:text-[#8096a7] placeholder:font-normal text-[#0d1b2a] ${className}`}
         {...props}
       />
-      {error && <span className="text-xs text-red-500">{error}</span>}
+      {hint && !error && <span className="text-xs text-[#8096a7]">{hint}</span>}
+      {error && <span className="text-xs text-red-500 font-medium">{error}</span>}
     </div>
   )
 })
