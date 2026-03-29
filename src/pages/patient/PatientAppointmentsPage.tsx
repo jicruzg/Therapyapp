@@ -149,19 +149,24 @@ export default function PatientAppointmentsPage() {
           <Calendar size={18} className="text-[#0d1b2a]" />
         </div>
         <div className="flex-1">
-          <p className="text-white font-bold text-sm mb-1">¿Cómo agendar tu cita?</p>
-          <ol className="text-white/70 text-xs space-y-1 leading-relaxed list-none">
-            <li><span className="text-[#f9a825] font-bold">1.</span> Abre el calendario de Zoom de tu terapeuta</li>
-            <li><span className="text-[#f9a825] font-bold">2.</span> Elige fecha y hora disponible y confirma en Zoom</li>
-            <li><span className="text-[#f9a825] font-bold">3.</span> Vuelve aquí y haz clic en <strong className="text-white">"Ya agendé en Zoom"</strong> para registrar tu cita</li>
+          <p className="text-white font-bold text-sm mb-1">Agendar nueva cita — 2 pasos</p>
+          <ol className="text-white/70 text-xs space-y-1.5 leading-relaxed list-none mb-4">
+            <li className="flex items-start gap-2">
+              <span className="bg-[#f9a825] text-[#0d1b2a] font-bold rounded-full w-4 h-4 flex items-center justify-center flex-shrink-0 mt-0.5 text-[10px]">1</span>
+              <span>Abre el calendario de Zoom, elige tu horario y confirma</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="bg-[#f9a825] text-[#0d1b2a] font-bold rounded-full w-4 h-4 flex items-center justify-center flex-shrink-0 mt-0.5 text-[10px]">2</span>
+              <span>Vuelve aquí y registra la fecha para que tu terapeuta pueda ver la cita</span>
+            </li>
           </ol>
-          <div className="flex gap-2 mt-4">
+          <div className="flex gap-2">
             <Button
               size="sm"
               onClick={openZoom}
               className="gap-2 bg-[#f9a825] hover:bg-[#e6971a] text-[#0d1b2a] font-bold"
             >
-              <ExternalLink size={13} /> Abrir Zoom
+              <ExternalLink size={13} /> Paso 1: Abrir Zoom
             </Button>
             <Button
               size="sm"
@@ -169,7 +174,7 @@ export default function PatientAppointmentsPage() {
               onClick={openConfirmModal}
               className="gap-2 border-white/30 text-white hover:bg-white/10"
             >
-              Ya agendé en Zoom <ArrowRight size={13} />
+              Paso 2: Registrar cita <ArrowRight size={13} />
             </Button>
           </div>
         </div>
