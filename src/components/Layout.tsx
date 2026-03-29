@@ -74,7 +74,6 @@ export default function Layout({ children }: LayoutProps) {
     { to: '/terapeuta/pacientes', icon: Users, label: t('nav_patients') },
     { to: '/terapeuta/citas', icon: Calendar, label: t('nav_appointments') },
     { to: '/terapeuta/pruebas', icon: ClipboardList, label: t('nav_tests') },
-    { to: '/terapeuta/disponibilidad', icon: BarChart2, label: t('nav_availability') },
   ]
 
   const patientNav = [

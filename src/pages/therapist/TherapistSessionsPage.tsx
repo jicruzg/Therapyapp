@@ -6,36 +6,116 @@ import { Card } from '../../components/ui/Card'
 import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
 import { Modal } from '../../components/ui/Modal'
-import { Calendar, CheckCircle, XCircle, Clock } from 'lucide-react'
+import { Calendar, CheckCircle, XCircle, Clock, Plus, Globe } from 'lucide-react'
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isToday, addMonths, subMonths } from 'date-fns'
 import { es, ptBR } from 'date-fns/locale'
+import { fromZonedTime } from 'date-fns-tz'
 import { useLang } from '../../contexts/LangContext'
 
 type SessionWithPatient = Session & { patient: Patient }
+
+const TIMEZONES = [
+  { value: 'America/Mexico_City',            label: 'México (Ciudad de México) UTC-6' },
+  { value: 'America/Cancun',                 label: 'México (Cancún) UTC-5' },
+  { value: 'America/Guatemala',              label: 'Guatemala / El Salvador UTC-6' },
+  { value: 'America/Costa_Rica',             label: 'Costa Rica UTC-6' },
+  { value: 'America/Panama',                 label: 'Panamá UTC-5' },
+  { value: 'America/Bogota',                 label: 'Colombia / Perú / Ecuador UTC-5' },
+  { value: 'America/Lima',                   label: 'Perú (Lima) UTC-5' },
+  { value: 'America/Caracas',                label: 'Venezuela UTC-4' },
+  { value: 'America/Santiago',               label: 'Chile UTC-4/-3' },
+  { value: 'America/Sao_Paulo',              label: 'Brasil (São Paulo) UTC-3' },
+  { value: 'America/Argentina/Buenos_Aires', label: 'Argentina UTC-3' },
+  { value: 'America/New_York',               label: 'EE.UU. Este UTC-5/-4' },
+  { value: 'America/Chicago',                label: 'EE.UU. Centro UTC-6/-5' },
+  { value: 'America/Los_Angeles',            label: 'EE.UU. Pacífico UTC-8/-7' },
+  { value: 'Europe/Madrid',                  label: 'España (Madrid) UTC+1/+2' },
+]
 
 export default function TherapistSessionsPage() {
   const { profile } = useAuth()
   const { lang } = useLang()
   const locale = lang === 'pt' ? ptBR : es
   const [sessions, setSessions] = useState<SessionWithPatient[]>([])
+  const [patients, setPatients] = useState<Patient[]>([])
   const [selected, setSelected] = useState<Date>(new Date())
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [loading, setLoading] = useState(true)
   const [showSession, setShowSession] = useState<SessionWithPatient | null>(null)
 
+  // Register session modal state
+  const [showRegister, setShowRegister] = useState(false)
+  const [regPatientId, setRegPatientId] = useState('')
+  const [regDate, setRegDate] = useState('')
+  const [regTime, setRegTime] = useState('')
+  const [regTimezone, setRegTimezone] = useState('America/Mexico_City')
+  const [regDuration, setRegDuration] = useState('60')
+  const [registering, setRegistering] = useState(false)
+  const [regError, setRegError] = useState('')
+
   useEffect(() => {
     async function load() {
       if (!profile) return
-      const { data } = await supabase
-        .from('sessions')
-        .select('*, patient:patients(*)')
-        .eq('therapist_id', profile.id)
-        .order('scheduled_at', { ascending: false })
-      setSessions((data ?? []) as SessionWithPatient[])
+      const [sessionsRes, patientsRes] = await Promise.all([
+        supabase.from('sessions').select('*, patient:patients(*)').eq('therapist_id', profile.id).order('scheduled_at', { ascending: false }),
+        supabase.from('patients').select('*').eq('therapist_id', profile.id).eq('status', 'active'),
+      ])
+      setSessions((sessionsRes.data ?? []) as SessionWithPatient[])
+      setPatients(patientsRes.data ?? [])
       setLoading(false)
     }
     load()
   }, [profile])
+
+  function openRegister() {
+    setRegPatientId(patients[0]?.id ?? '')
+    setRegDate('')
+    setRegTime('')
+    setRegTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone in TIMEZONES.map(t => t.value)
+      ? Intl.DateTimeFormat().resolvedOptions().timeZone
+      : 'America/Mexico_City')
+    setRegDuration('60')
+    setRegError('')
+    setShowRegister(true)
+  }
+
+  async function registerSession() {
+    if (!regPatientId || !regDate || !regTime) { setRegError('Completa todos los campos.'); return }
+    if (!profile) return
+    setRegError('')
+    setRegistering(true)
+
+    const utcDate = fromZonedTime(`${regDate}T${regTime}:00`, regTimezone)
+    const { data, error } = await supabase.from('sessions').insert({
+      therapist_id: profile.id,
+      patient_id: regPatientId,
+      scheduled_at: utcDate.toISOString(),
+      duration_minutes: parseInt(regDuration),
+      status: 'scheduled',
+    }).select('*, patient:patients(*)').single()
+
+    if (error) { setRegError('Error al guardar. Intenta de nuevo.'); setRegistering(false); return }
+
+    const patient = patients.find(p => p.id === regPatientId)
+    setSessions(prev => [data as SessionWithPatient, ...prev])
+
+    // Notify patient
+    const tzLabel = TIMEZONES.find(t => t.value === regTimezone)?.label ?? regTimezone
+    const localStr = format(new Date(`${regDate}T${regTime}`), "d 'de' MMMM 'a las' HH:mm", { locale: es })
+    await supabase.from('notifications').insert({
+      patient_id: regPatientId,
+      title: 'Cita confirmada',
+      message: `Tu terapeuta ha registrado tu cita para el ${localStr} (${tzLabel}). Revisa tu correo de Zoom para el enlace.`,
+      type: 'appointment',
+    })
+
+    setRegistering(false)
+    setShowRegister(false)
+    // Select that day on calendar
+    setSelected(utcDate)
+    setCurrentMonth(utcDate)
+    void patient
+  }
 
   const days = eachDayOfInterval({ start: startOfMonth(currentMonth), end: endOfMonth(currentMonth) })
   const dayNames = lang === 'pt'
@@ -45,7 +125,6 @@ export default function TherapistSessionsPage() {
   function sessionsOnDay(day: Date) {
     return sessions.filter(s => isSameDay(new Date(s.scheduled_at), day))
   }
-
   const selectedDaySessions = sessionsOnDay(selected)
 
   async function updateStatus(sessionId: string, status: 'completed' | 'cancelled') {
@@ -58,14 +137,20 @@ export default function TherapistSessionsPage() {
     ? (s === 'completed' ? 'Concluída' : s === 'scheduled' ? 'Agendada' : 'Cancelada')
     : (s === 'completed' ? 'Completada' : s === 'scheduled' ? 'Programada' : 'Cancelada')
 
+  const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1)
+  const minDate = tomorrow.toISOString().split('T')[0]
+
   return (
     <div className="space-y-6">
-      <div>
-        <p className="text-sm font-semibold text-[#f9a825] uppercase tracking-widest mb-1">
-          {lang === 'pt' ? 'Agenda' : 'Agenda'}
-        </p>
-        <h1 className="text-3xl font-bold text-[#0d1b2a]">{lang === 'pt' ? 'Consultas' : 'Citas'}</h1>
-        <p className="text-[#526070] mt-1">{sessions.length} {lang === 'pt' ? 'consultas registradas' : 'citas registradas'}</p>
+      <div className="flex items-start justify-between">
+        <div>
+          <p className="text-sm font-semibold text-[#f9a825] uppercase tracking-widest mb-1">Agenda</p>
+          <h1 className="text-3xl font-bold text-[#0d1b2a]">{lang === 'pt' ? 'Consultas' : 'Citas'}</h1>
+          <p className="text-[#526070] mt-1">{sessions.length} {lang === 'pt' ? 'consultas registradas' : 'citas registradas'}</p>
+        </div>
+        <Button onClick={openRegister} size="sm" className="gap-2 mt-1" disabled={patients.length === 0}>
+          <Plus size={14} /> Registrar cita de Zoom
+        </Button>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
@@ -150,10 +235,10 @@ export default function TherapistSessionsPage() {
           <div className="space-y-4">
             <div className="bg-[#f0f4f8] rounded-xl p-4 space-y-3 text-sm">
               {[
-                [lang === 'pt' ? 'Paciente' : 'Paciente', showSession.patient?.full_name],
-                [lang === 'pt' ? 'Data' : 'Fecha', format(new Date(showSession.scheduled_at), "d 'de' MMMM yyyy", { locale })],
-                [lang === 'pt' ? 'Hora' : 'Hora', format(new Date(showSession.scheduled_at), 'HH:mm')],
-                [lang === 'pt' ? 'Duração' : 'Duración', `${showSession.duration_minutes} min`],
+                ['Paciente', showSession.patient?.full_name],
+                ['Fecha', format(new Date(showSession.scheduled_at), "d 'de' MMMM yyyy", { locale })],
+                ['Hora', format(new Date(showSession.scheduled_at), 'HH:mm')],
+                ['Duración', `${showSession.duration_minutes} min`],
               ].map(([label, value]) => (
                 <div key={label} className="flex justify-between items-center">
                   <span className="text-[#526070] font-medium">{label}:</span>
@@ -161,7 +246,7 @@ export default function TherapistSessionsPage() {
                 </div>
               ))}
               <div className="flex justify-between items-center">
-                <span className="text-[#526070] font-medium">{lang === 'pt' ? 'Status' : 'Estado'}:</span>
+                <span className="text-[#526070] font-medium">Estado:</span>
                 <Badge color={showSession.status === 'completed' ? 'green' : showSession.status === 'scheduled' ? 'navy' : 'gray'}>
                   {statusLabel(showSession.status)}
                 </Badge>
@@ -169,22 +254,107 @@ export default function TherapistSessionsPage() {
             </div>
             {showSession.notes && (
               <div>
-                <p className="text-sm font-semibold text-[#0d1b2a] mb-2">{lang === 'pt' ? 'Notas:' : 'Notas:'}</p>
+                <p className="text-sm font-semibold text-[#0d1b2a] mb-2">Notas:</p>
                 <div className="bg-[#e8f0f7] rounded-xl p-4 text-sm text-[#0d1b2a] whitespace-pre-wrap">{showSession.notes}</div>
               </div>
             )}
             {showSession.status === 'scheduled' && (
               <div className="flex gap-3 pt-2">
                 <Button variant="ghost" size="sm" className="flex-1 gap-2 text-red-500 hover:bg-red-50" onClick={() => updateStatus(showSession.id, 'cancelled')}>
-                  <XCircle size={14} /> {lang === 'pt' ? 'Cancelar' : 'Cancelar cita'}
+                  <XCircle size={14} /> Cancelar cita
                 </Button>
                 <Button size="sm" className="flex-1 gap-2" onClick={() => updateStatus(showSession.id, 'completed')}>
-                  <CheckCircle size={14} /> {lang === 'pt' ? 'Concluir' : 'Marcar completada'}
+                  <CheckCircle size={14} /> Marcar completada
                 </Button>
               </div>
             )}
           </div>
         )}
+      </Modal>
+
+      {/* Register Zoom session modal */}
+      <Modal open={showRegister} onClose={() => setShowRegister(false)} title="Registrar cita de Zoom" size="sm">
+        <div className="space-y-4">
+          <p className="text-sm text-[#526070]">
+            Registra la cita que el paciente agendó en Zoom. Usa la hora local del paciente.
+          </p>
+
+          {/* Patient selector */}
+          <div>
+            <label className="block text-sm font-semibold text-[#0d1b2a] mb-1.5">Paciente</label>
+            <select
+              value={regPatientId}
+              onChange={e => setRegPatientId(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-xl border border-[#dce5ec] text-sm font-medium text-[#0d1b2a] focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10 bg-white"
+            >
+              {patients.map(p => (
+                <option key={p.id} value={p.id}>{p.full_name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label className="block text-sm font-semibold text-[#0d1b2a] mb-1.5">Fecha</label>
+              <input
+                type="date"
+                value={regDate}
+                min={minDate}
+                onChange={e => { setRegDate(e.target.value); setRegError('') }}
+                className="w-full px-4 py-2.5 rounded-xl border border-[#dce5ec] text-sm font-medium text-[#0d1b2a] focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-[#0d1b2a] mb-1.5">Hora</label>
+              <input
+                type="time"
+                value={regTime}
+                onChange={e => { setRegTime(e.target.value); setRegError('') }}
+                className="w-full px-4 py-2.5 rounded-xl border border-[#dce5ec] text-sm font-medium text-[#0d1b2a] focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10"
+              />
+            </div>
+          </div>
+
+          {/* Timezone */}
+          <div>
+            <label className="block text-sm font-semibold text-[#0d1b2a] mb-1.5 flex items-center gap-1.5">
+              <Globe size={13} className="text-[#8096a7]" /> Huso horario del paciente
+            </label>
+            <select
+              value={regTimezone}
+              onChange={e => setRegTimezone(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-xl border border-[#dce5ec] text-sm font-medium text-[#0d1b2a] focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10 bg-white"
+            >
+              {TIMEZONES.map(tz => (
+                <option key={tz.value} value={tz.value}>{tz.label}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Duration */}
+          <div>
+            <label className="block text-sm font-semibold text-[#0d1b2a] mb-1.5">Duración</label>
+            <select
+              value={regDuration}
+              onChange={e => setRegDuration(e.target.value)}
+              className="w-full px-4 py-2.5 rounded-xl border border-[#dce5ec] text-sm font-medium text-[#0d1b2a] focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10 bg-white"
+            >
+              <option value="30">30 minutos</option>
+              <option value="45">45 minutos</option>
+              <option value="60">60 minutos</option>
+              <option value="90">90 minutos</option>
+            </select>
+          </div>
+
+          {regError && <p className="text-sm text-red-500 font-medium">{regError}</p>}
+
+          <div className="flex gap-3">
+            <Button variant="ghost" onClick={() => setShowRegister(false)} className="flex-1">Cancelar</Button>
+            <Button onClick={registerSession} loading={registering} disabled={!regPatientId || !regDate || !regTime} className="flex-1">
+              Confirmar cita
+            </Button>
+          </div>
+        </div>
       </Modal>
     </div>
   )

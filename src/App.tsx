@@ -41,7 +41,6 @@ import PatientsPage from './pages/therapist/PatientsPage'
 import PatientDetailPage from './pages/therapist/PatientDetailPage'
 import TherapistSessionsPage from './pages/therapist/TherapistSessionsPage'
 import TherapistTestsPage from './pages/therapist/TherapistTestsPage'
-import AvailabilityPage from './pages/therapist/AvailabilityPage'
 
 // Patient pages
 import PatientHome from './pages/patient/PatientHome'
@@ -115,11 +114,6 @@ function AppRoutes() {
       <Route path="/terapeuta/pruebas" element={
         <ProtectedRoute role="therapist">
           <Layout><TherapistTestsPage /></Layout>
-        </ProtectedRoute>
-      } />
-      <Route path="/terapeuta/disponibilidad" element={
-        <ProtectedRoute role="therapist">
-          <Layout><AvailabilityPage /></Layout>
         </ProtectedRoute>
       } />
 
