@@ -151,6 +151,88 @@ export const TESTS: Record<string, TestDefinition> = {
     }
   },
 
+  BDIII: {
+    code: 'BDIII',
+    name: 'BDI-II',
+    description: 'Inventario de Depresión de Beck II',
+    instructions: 'Este cuestionario contiene grupos de afirmaciones. Lea cada grupo y elija la que mejor describe cómo se ha sentido durante las últimas dos semanas, incluyendo el día de hoy.',
+    questions: [
+      { id: 1, text: 'Tristeza', options: [{ value: 0, label: 'No me siento triste' }, { value: 1, label: 'Me siento triste gran parte del tiempo' }, { value: 2, label: 'Me siento triste continuamente' }, { value: 3, label: 'Me siento tan triste que no puedo soportarlo' }] },
+      { id: 2, text: 'Pesimismo', options: [{ value: 0, label: 'No estoy desanimado sobre mi futuro' }, { value: 1, label: 'Me siento más desanimado sobre mi futuro que antes' }, { value: 2, label: 'No espero que las cosas mejoren' }, { value: 3, label: 'Siento que mi futuro es desesperanzador y que las cosas solo empeorarán' }] },
+      { id: 3, text: 'Fracaso', options: [{ value: 0, label: 'No me siento fracasado/a' }, { value: 1, label: 'He fracasado más de lo que debería' }, { value: 2, label: 'Cuando miro atrás veo muchos fracasos' }, { value: 3, label: 'Siento que soy un fracaso total como persona' }] },
+      { id: 4, text: 'Pérdida de placer', options: [{ value: 0, label: 'Obtengo tanto placer de las cosas como siempre' }, { value: 1, label: 'No disfruto de las cosas tanto como antes' }, { value: 2, label: 'Obtengo muy poco placer de las cosas que solía disfrutar' }, { value: 3, label: 'No puedo obtener ningún placer de las cosas que solía disfrutar' }] },
+      { id: 5, text: 'Sentimientos de culpa', options: [{ value: 0, label: 'No me siento particularmente culpable' }, { value: 1, label: 'Me siento culpable de muchas cosas que he hecho o debería haber hecho' }, { value: 2, label: 'Me siento bastante culpable la mayor parte del tiempo' }, { value: 3, label: 'Me siento culpable constantemente' }] },
+      { id: 6, text: 'Sentimientos de castigo', options: [{ value: 0, label: 'No creo que esté siendo castigado/a' }, { value: 1, label: 'Siento que podría ser castigado/a' }, { value: 2, label: 'Espero ser castigado/a' }, { value: 3, label: 'Siento que estoy siendo castigado/a' }] },
+      { id: 7, text: 'Disconformidad con uno mismo', options: [{ value: 0, label: 'Siento lo mismo que siempre sobre mí mismo/a' }, { value: 1, label: 'He perdido confianza en mí mismo/a' }, { value: 2, label: 'Estoy decepcionado/a conmigo mismo/a' }, { value: 3, label: 'Me odio' }] },
+      { id: 8, text: 'Autocrítica', options: [{ value: 0, label: 'No me critico ni me culpo más de lo habitual' }, { value: 1, label: 'Me critico más de lo que solía hacerlo' }, { value: 2, label: 'Me critico por todos mis errores' }, { value: 3, label: 'Me culpo de todo lo malo que me sucede' }] },
+      { id: 9, text: 'Pensamientos suicidas', options: [{ value: 0, label: 'No tengo ningún pensamiento de hacerme daño' }, { value: 1, label: 'Tengo pensamientos de hacerme daño pero no los llevaría a cabo' }, { value: 2, label: 'Me gustaría suicidarme' }, { value: 3, label: 'Me suicidaría si tuviera la oportunidad' }] },
+      { id: 10, text: 'Llanto', options: [{ value: 0, label: 'No lloro más de lo que solía hacerlo' }, { value: 1, label: 'Lloro más de lo que solía hacerlo' }, { value: 2, label: 'Lloro por cualquier cosa' }, { value: 3, label: 'Siento ganas de llorar constantemente pero no puedo' }] },
+      { id: 11, text: 'Agitación', options: [{ value: 0, label: 'No estoy más agitado/a de lo habitual' }, { value: 1, label: 'Me siento más agitado/a de lo habitual' }, { value: 2, label: 'Estoy tan agitado/a que me cuesta quedarme quieto/a' }, { value: 3, label: 'Estoy tan agitado/a que tengo que estar moviéndome constantemente' }] },
+      { id: 12, text: 'Pérdida de interés', options: [{ value: 0, label: 'No he perdido el interés en otras personas o actividades' }, { value: 1, label: 'Me intereso menos que antes por otras personas o actividades' }, { value: 2, label: 'He perdido la mayor parte del interés en los demás' }, { value: 3, label: 'Me resulta difícil interesarme en algo' }] },
+      { id: 13, text: 'Indecisión', options: [{ value: 0, label: 'Tomo mis decisiones tan bien como siempre' }, { value: 1, label: 'Tomar decisiones me resulta más difícil que antes' }, { value: 2, label: 'Me cuesta mucho más tomar decisiones que antes' }, { value: 3, label: 'Tengo dificultades para tomar cualquier decisión' }] },
+      { id: 14, text: 'Inutilidad', options: [{ value: 0, label: 'No me siento inútil' }, { value: 1, label: 'No me siento tan valioso/a como antes' }, { value: 2, label: 'Me siento más inútil comparado con otras personas' }, { value: 3, label: 'Me siento totalmente inútil' }] },
+      { id: 15, text: 'Pérdida de energía', options: [{ value: 0, label: 'Tengo tanta energía como siempre' }, { value: 1, label: 'Tengo menos energía de la que solía tener' }, { value: 2, label: 'No tengo suficiente energía para hacer muchas cosas' }, { value: 3, label: 'No tengo energía para hacer nada' }] },
+      { id: 16, text: 'Cambios en el sueño', options: [{ value: 0, label: 'No he experimentado cambios en mi sueño' }, { value: 1, label: 'Duermo algo más/menos de lo habitual' }, { value: 2, label: 'Duermo bastante más/menos de lo habitual' }, { value: 3, label: 'Duermo la mayor parte del día / me despierto 1-2 horas antes y no puedo volver a dormir' }] },
+      { id: 17, text: 'Irritabilidad', options: [{ value: 0, label: 'No estoy más irritable de lo habitual' }, { value: 1, label: 'Estoy más irritable de lo habitual' }, { value: 2, label: 'Estoy mucho más irritable de lo habitual' }, { value: 3, label: 'Estoy irritable constantemente' }] },
+      { id: 18, text: 'Cambios en el apetito', options: [{ value: 0, label: 'No he experimentado cambios en mi apetito' }, { value: 1, label: 'Mi apetito es algo mayor/menor de lo habitual' }, { value: 2, label: 'Mi apetito es bastante mayor/menor de lo habitual' }, { value: 3, label: 'No tengo nada de apetito / tengo mucha más hambre de lo habitual' }] },
+      { id: 19, text: 'Dificultad de concentración', options: [{ value: 0, label: 'Puedo concentrarme tan bien como siempre' }, { value: 1, label: 'No puedo concentrarme tan bien como antes' }, { value: 2, label: 'Me cuesta concentrarme durante mucho tiempo' }, { value: 3, label: 'No puedo concentrarme en nada' }] },
+      { id: 20, text: 'Cansancio o fatiga', options: [{ value: 0, label: 'No estoy más cansado/a de lo habitual' }, { value: 1, label: 'Me canso más fácilmente de lo habitual' }, { value: 2, label: 'Estoy demasiado cansado/a para hacer muchas cosas' }, { value: 3, label: 'Estoy demasiado cansado/a para hacer la mayoría de cosas' }] },
+      { id: 21, text: 'Pérdida de interés en el sexo', options: [{ value: 0, label: 'No he notado cambios en mi interés por el sexo' }, { value: 1, label: 'Me interesa menos el sexo que antes' }, { value: 2, label: 'Me interesa mucho menos el sexo ahora' }, { value: 3, label: 'He perdido completamente el interés en el sexo' }] },
+    ],
+    scoring: (answers) => {
+      const total = Object.values(answers).reduce((s, v) => s + v, 0)
+      return { total }
+    },
+    interpretation: (scores) => {
+      const { total } = scores
+      if (total >= 29) return { label: 'Depresión grave', color: 'red', description: 'Puntuación 29-63: depresión grave. Se recomienda atención clínica inmediata.' }
+      if (total >= 20) return { label: 'Depresión moderada', color: 'yellow', description: 'Puntuación 20-28: depresión moderada. Se recomienda tratamiento.' }
+      if (total >= 14) return { label: 'Depresión leve', color: 'yellow', description: 'Puntuación 14-19: depresión leve.' }
+      return { label: 'Mínima o sin depresión', color: 'green', description: 'Puntuación 0-13: sin depresión clínicamente significativa.' }
+    }
+  },
+
+  BAI: {
+    code: 'BAI',
+    name: 'BAI',
+    description: 'Inventario de Ansiedad de Beck',
+    instructions: 'A continuación se presenta una lista de síntomas. Indique cuánto le ha molestado cada síntoma durante la última semana.',
+    questions: [
+      { id: 1, text: 'Entumecimiento u hormigueo', options: likert0to3 },
+      { id: 2, text: 'Sensación de calor', options: likert0to3 },
+      { id: 3, text: 'Temblor en las piernas', options: likert0to3 },
+      { id: 4, text: 'Incapaz de relajarse', options: likert0to3 },
+      { id: 5, text: 'Miedo a que suceda lo peor', options: likert0to3 },
+      { id: 6, text: 'Mareos o sensación de desmayo', options: likert0to3 },
+      { id: 7, text: 'Palpitaciones o aceleración del corazón', options: likert0to3 },
+      { id: 8, text: 'Sensación de inestabilidad o falta de equilibrio', options: likert0to3 },
+      { id: 9, text: 'Terrorizado/a o espantado/a', options: likert0to3 },
+      { id: 10, text: 'Nerviosismo', options: likert0to3 },
+      { id: 11, text: 'Sensación de ahogo', options: likert0to3 },
+      { id: 12, text: 'Temblores en las manos', options: likert0to3 },
+      { id: 13, text: 'Cuerpo tembloroso o estremecido', options: likert0to3 },
+      { id: 14, text: 'Miedo a perder el control', options: likert0to3 },
+      { id: 15, text: 'Dificultad para respirar', options: likert0to3 },
+      { id: 16, text: 'Miedo a morir', options: likert0to3 },
+      { id: 17, text: 'Asustado/a', options: likert0to3 },
+      { id: 18, text: 'Indigestión o molestia abdominal', options: likert0to3 },
+      { id: 19, text: 'Sensación de desmayo o mareo', options: likert0to3 },
+      { id: 20, text: 'Cara enrojecida', options: likert0to3 },
+      { id: 21, text: 'Sudoración (no debida al calor)', options: likert0to3 },
+    ],
+    scoring: (answers) => {
+      const total = Object.values(answers).reduce((s, v) => s + v, 0)
+      return { total }
+    },
+    interpretation: (scores) => {
+      const { total } = scores
+      if (total >= 26) return { label: 'Ansiedad grave', color: 'red', description: 'Puntuación 26-63: ansiedad grave.' }
+      if (total >= 16) return { label: 'Ansiedad moderada', color: 'yellow', description: 'Puntuación 16-25: ansiedad moderada.' }
+      if (total >= 8) return { label: 'Ansiedad leve', color: 'yellow', description: 'Puntuación 8-15: ansiedad leve.' }
+      return { label: 'Ansiedad mínima', color: 'green', description: 'Puntuación 0-7: ansiedad mínima.' }
+    }
+  },
+
   BSL23: {
     code: 'BSL23',
     name: 'BSL-23',
