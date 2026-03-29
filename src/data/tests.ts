@@ -233,7 +233,96 @@ export const TESTS: Record<string, TestDefinition> = {
     }
   },
 
-  BSL23: {
+  PCL5: {
+    code: 'PCL5',
+    name: 'PCL-5',
+    description: 'Lista Checable de Trastorno por Estrés Postraumático (DSM-5)',
+    instructions: 'A continuación se presentan problemas que las personas a veces tienen en respuesta a una experiencia muy estresante. Por favor lea cada problema y seleccione cuánto le ha molestado en el último mes.',
+    questions: [
+      { id: 1, text: 'Recuerdos repetidos, perturbadores e involuntarios de la experiencia estresante', subscale: 'intrusion', options: likert0to4 },
+      { id: 2, text: 'Sueños perturbadores repetidos de la experiencia estresante', subscale: 'intrusion', options: likert0to4 },
+      { id: 3, text: 'Sentirse o actuar de repente como si la experiencia estresante estuviera ocurriendo de nuevo (como si la estuviera reviviendo)', subscale: 'intrusion', options: likert0to4 },
+      { id: 4, text: 'Sentirse muy molesto/a cuando algo le recuerda la experiencia estresante', subscale: 'intrusion', options: likert0to4 },
+      { id: 5, text: 'Tener reacciones físicas fuertes cuando algo le recuerda la experiencia estresante (palpitaciones, dificultad para respirar, sudoración)', subscale: 'intrusion', options: likert0to4 },
+      { id: 6, text: 'Evitar recuerdos, pensamientos o sentimientos relacionados con la experiencia estresante', subscale: 'avoidance', options: likert0to4 },
+      { id: 7, text: 'Evitar recordatorios externos de la experiencia estresante (personas, lugares, conversaciones, actividades, objetos o situaciones)', subscale: 'avoidance', options: likert0to4 },
+      { id: 8, text: 'Dificultad para recordar partes importantes de la experiencia estresante', subscale: 'cognition', options: likert0to4 },
+      { id: 9, text: 'Tener creencias negativas fuertes sobre usted mismo/a, otras personas o el mundo', subscale: 'cognition', options: likert0to4 },
+      { id: 10, text: 'Culparse a sí mismo/a o a otros de la experiencia estresante o de sus consecuencias', subscale: 'cognition', options: likert0to4 },
+      { id: 11, text: 'Tener sentimientos negativos fuertes como miedo, horror, rabia, culpa o vergüenza', subscale: 'cognition', options: likert0to4 },
+      { id: 12, text: 'Perder interés en actividades que antes le gustaban', subscale: 'cognition', options: likert0to4 },
+      { id: 13, text: 'Sentirse distante o ajeno/a de otras personas', subscale: 'cognition', options: likert0to4 },
+      { id: 14, text: 'Dificultad para experimentar sentimientos positivos (por ejemplo, ser incapaz de sentir alegría o amor)', subscale: 'cognition', options: likert0to4 },
+      { id: 15, text: 'Comportamiento irritable, arrebatos de enojo o actuar agresivamente', subscale: 'arousal', options: likert0to4 },
+      { id: 16, text: 'Tomar riesgos excesivos o hacer cosas que podrían causarle daño', subscale: 'arousal', options: likert0to4 },
+      { id: 17, text: 'Estar "en guardia", alerta o vigilante', subscale: 'arousal', options: likert0to4 },
+      { id: 18, text: 'Sentirse sobresaltado/a o asustado/a fácilmente', subscale: 'arousal', options: likert0to4 },
+      { id: 19, text: 'Dificultad para concentrarse', subscale: 'arousal', options: likert0to4 },
+      { id: 20, text: 'Dificultad para conciliar o mantener el sueño', subscale: 'arousal', options: likert0to4 },
+    ],
+    scoring: (answers) => {
+      const intrusion  = [1,2,3,4,5].reduce((s, id) => s + (answers[id] ?? 0), 0)
+      const avoidance  = [6,7].reduce((s, id) => s + (answers[id] ?? 0), 0)
+      const cognition  = [8,9,10,11,12,13,14].reduce((s, id) => s + (answers[id] ?? 0), 0)
+      const arousal    = [15,16,17,18,19,20].reduce((s, id) => s + (answers[id] ?? 0), 0)
+      const total = intrusion + avoidance + cognition + arousal
+      return { total, intrusion, avoidance, cognition, arousal }
+    },
+    interpretation: (scores) => {
+      const { total } = scores
+      if (total >= 33) return { label: 'TEPT probable', color: 'red', description: 'Puntuación ≥33 sugiere diagnóstico probable de TEPT. Se recomienda evaluación clínica.' }
+      if (total >= 20) return { label: 'Síntomas moderados', color: 'yellow', description: 'Síntomas postraumáticos moderados. Seguimiento clínico recomendado.' }
+      return { label: 'Síntomas leves o ausentes', color: 'green', description: 'Puntuación por debajo del umbral clínico.' }
+    }
+  },
+
+  MBI: {
+    code: 'MBI',
+    name: 'MBI',
+    description: 'Inventario de Burnout de Maslach',
+    instructions: 'A continuación hay una serie de enunciados sobre su trabajo. Por favor lea cada enunciado y decida con qué frecuencia se siente así.',
+    questions: [
+      { id: 1,  text: 'Me siento emocionalmente agotado/a por mi trabajo.', subscale: 'ee', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 2,  text: 'Me siento cansado/a al final de la jornada laboral.', subscale: 'ee', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 3,  text: 'Me siento fatigado/a cuando me levanto por las mañanas y tengo que enfrentarme a otro día de trabajo.', subscale: 'ee', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 4,  text: 'Puedo entender fácilmente cómo se sienten mis pacientes/clientes.', subscale: 'pa', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 5,  text: 'Creo que trato a algunos pacientes/clientes como si fueran objetos impersonales.', subscale: 'dp', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 6,  text: 'Trabajar con personas todo el día es un esfuerzo para mí.', subscale: 'ee', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 7,  text: 'Trato con mucha eficacia los problemas de mis pacientes/clientes.', subscale: 'pa', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 8,  text: 'Me siento "quemado/a" por mi trabajo.', subscale: 'ee', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 9,  text: 'Creo que estoy influyendo positivamente en la vida de otras personas a través de mi trabajo.', subscale: 'pa', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 10, text: 'Me he vuelto más insensible con la gente desde que ejerzo esta profesión.', subscale: 'dp', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 11, text: 'Me preocupa que este trabajo me esté endureciendo emocionalmente.', subscale: 'dp', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 12, text: 'Me siento con mucha energía.', subscale: 'pa', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 13, text: 'Me siento frustrado/a por mi trabajo.', subscale: 'ee', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 14, text: 'Creo que estoy trabajando demasiado.', subscale: 'ee', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 15, text: 'Realmente no me preocupa lo que les ocurre a algunos pacientes/clientes.', subscale: 'dp', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 16, text: 'Trabajar directamente con personas me produce demasiado estrés.', subscale: 'ee', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 17, text: 'Tengo facilidad para crear una atmósfera relajada con mis pacientes/clientes.', subscale: 'pa', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 18, text: 'Me siento estimulado/a después de trabajar con mis pacientes/clientes.', subscale: 'pa', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 19, text: 'He conseguido muchas cosas satisfactorias en mi profesión.', subscale: 'pa', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 20, text: 'Me siento como si estuviera al límite de mis posibilidades.', subscale: 'ee', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 21, text: 'En mi trabajo trato los problemas emocionales con mucha calma.', subscale: 'pa', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+      { id: 22, text: 'Siento que los pacientes/clientes me culpan de algunos de sus problemas.', subscale: 'dp', options: [{ value: 0, label: 'Nunca' }, { value: 1, label: 'Pocas veces al año' }, { value: 2, label: 'Una vez al mes' }, { value: 3, label: 'Pocas veces al mes' }, { value: 4, label: 'Una vez a la semana' }, { value: 5, label: 'Pocas veces a la semana' }, { value: 6, label: 'Todos los días' }] },
+    ],
+    scoring: (answers) => {
+      const ee = [1,2,3,6,8,13,14,16,20].reduce((s, id) => s + (answers[id] ?? 0), 0)
+      const dp = [5,10,11,15,22].reduce((s, id) => s + (answers[id] ?? 0), 0)
+      const pa = [4,7,9,12,17,18,19,21].reduce((s, id) => s + (answers[id] ?? 0), 0)
+      return { cansancio_emocional: ee, despersonalizacion: dp, realizacion_personal: pa }
+    },
+    interpretation: (scores) => {
+      const { cansancio_emocional: ee, despersonalizacion: dp, realizacion_personal: pa } = scores
+      const burnoutEE = ee >= 27
+      const burnoutDP = dp >= 10
+      const burnoutPA = pa <= 33
+      const count = [burnoutEE, burnoutDP, burnoutPA].filter(Boolean).length
+      if (count >= 2) return { label: 'Burnout alto', color: 'red', description: `CE: ${ee} (alto ≥27) · D: ${dp} (alto ≥10) · RP: ${pa} (bajo ≤33). Presencia de burnout en múltiples dimensiones.` }
+      if (count === 1) return { label: 'Burnout moderado', color: 'yellow', description: `CE: ${ee} · D: ${dp} · RP: ${pa}. Indicadores de burnout en una dimensión.` }
+      return { label: 'Sin burnout significativo', color: 'green', description: `CE: ${ee} · D: ${dp} · RP: ${pa}. Puntuaciones dentro del rango normal.` }
+    }
+  },
+
     code: 'BSL23',
     name: 'BSL-23',
     description: 'Lista de Síntomas del Trastorno Límite de Personalidad',
