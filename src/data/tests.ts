@@ -323,6 +323,7 @@ export const TESTS: Record<string, TestDefinition> = {
     }
   },
 
+  BSL23: {
     code: 'BSL23',
     name: 'BSL-23',
     description: 'Lista de Síntomas del Trastorno Límite de Personalidad',
