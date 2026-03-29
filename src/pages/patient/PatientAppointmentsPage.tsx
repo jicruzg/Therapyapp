@@ -37,6 +37,7 @@ export default function PatientAppointmentsPage() {
   }, [])
 
   useEffect(() => {
+    let patId: string | null = null
     async function load() {
       if (!profile) return
       const { data: patient } = await supabase
@@ -45,12 +46,20 @@ export default function PatientAppointmentsPage() {
         .eq('profile_id', profile.id)
         .single()
       if (!patient) { setLoading(false); return }
+      patId = patient.id
       setPatientId(patient.id)
       setTherapistId(patient.therapist_id)
       await loadSessions(patient.id)
       setLoading(false)
     }
     load()
+
+    // Poll every 15 seconds for new sessions created by the Zoom webhook
+    const interval = setInterval(() => {
+      if (patId) loadSessions(patId)
+    }, 15000)
+
+    return () => clearInterval(interval)
   }, [profile, loadSessions])
 
   async function refresh() {
