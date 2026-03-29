@@ -8,7 +8,7 @@ import { Button } from '../../components/ui/Button'
 import { Modal } from '../../components/ui/Modal'
 import { Calendar, CheckCircle, XCircle, Clock } from 'lucide-react'
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isToday, addMonths, subMonths } from 'date-fns'
-import { es } from 'date-fns/locale'
+import { es, ptBR } from 'date-fns/locale'
 import { useLang } from '../../contexts/LangContext'
 
 type SessionWithPatient = Session & { patient: Patient }
@@ -16,7 +16,7 @@ type SessionWithPatient = Session & { patient: Patient }
 export default function TherapistSessionsPage() {
   const { profile } = useAuth()
   const { lang } = useLang()
-  const locale = lang === 'pt' ? { code: 'pt-BR' } : es
+  const locale = lang === 'pt' ? ptBR : es
   const [sessions, setSessions] = useState<SessionWithPatient[]>([])
   const [selected, setSelected] = useState<Date>(new Date())
   const [currentMonth, setCurrentMonth] = useState(new Date())
@@ -73,7 +73,7 @@ export default function TherapistSessionsPage() {
         <div className="lg:col-span-2">
           <Card className="p-6">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="font-bold text-[#0d1b2a] capitalize text-lg">{format(currentMonth, 'MMMM yyyy', { locale: es })}</h2>
+              <h2 className="font-bold text-[#0d1b2a] capitalize text-lg">{format(currentMonth, 'MMMM yyyy', { locale })}</h2>
               <div className="flex gap-1">
                 <button onClick={() => setCurrentMonth(m => subMonths(m, 1))} className="w-8 h-8 hover:bg-[#f0f4f8] rounded-xl flex items-center justify-center text-[#526070] font-bold transition-colors">‹</button>
                 <button onClick={() => setCurrentMonth(m => addMonths(m, 1))} className="w-8 h-8 hover:bg-[#f0f4f8] rounded-xl flex items-center justify-center text-[#526070] font-bold transition-colors">›</button>
@@ -115,7 +115,7 @@ export default function TherapistSessionsPage() {
         {/* Day sessions */}
         <div>
           <h3 className="font-bold text-[#0d1b2a] mb-3 capitalize">
-            {isToday(selected) ? (lang === 'pt' ? 'Hoje' : 'Hoy') : format(selected, "d 'de' MMMM", { locale: es })}
+            {isToday(selected) ? (lang === 'pt' ? 'Hoje' : 'Hoy') : format(selected, "d 'de' MMMM", { locale })}
           </h3>
           {loading ? (
             <div className="space-y-3">{[1,2].map(i => <div key={i} className="h-20 bg-white rounded-2xl animate-pulse border border-[#dce5ec]" />)}</div>
@@ -151,7 +151,7 @@ export default function TherapistSessionsPage() {
             <div className="bg-[#f0f4f8] rounded-xl p-4 space-y-3 text-sm">
               {[
                 [lang === 'pt' ? 'Paciente' : 'Paciente', showSession.patient?.full_name],
-                [lang === 'pt' ? 'Data' : 'Fecha', format(new Date(showSession.scheduled_at), "d 'de' MMMM yyyy", { locale: es })],
+                [lang === 'pt' ? 'Data' : 'Fecha', format(new Date(showSession.scheduled_at), "d 'de' MMMM yyyy", { locale })],
                 [lang === 'pt' ? 'Hora' : 'Hora', format(new Date(showSession.scheduled_at), 'HH:mm')],
                 [lang === 'pt' ? 'Duração' : 'Duración', `${showSession.duration_minutes} min`],
               ].map(([label, value]) => (
