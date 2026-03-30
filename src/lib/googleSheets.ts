@@ -4,6 +4,7 @@ const WEBHOOK_URL = import.meta.env.VITE_GOOGLE_SHEETS_WEBHOOK_URL as string | u
 
 /**
  * Sends completed test results to Google Sheets via Apps Script Web App.
+ * Uses GET + URL params to avoid CORS/redirect body-loss issues with doPost.
  * Fire-and-forget — does not block the UI on failure.
  */
 export async function sendTestResultToSheets(params: {
@@ -17,9 +18,8 @@ export async function sendTestResultToSheets(params: {
 
   const { testDef, answers, score, patientName, completedAt } = params
 
-  // Build ordered question data (by question index, not ID)
   const questionLabels = testDef.questions.map(
-    (q, i) => `${i + 1}. ${q.text.length > 80 ? q.text.slice(0, 80) + '…' : q.text}`
+    (q, i) => `${i + 1}. ${q.text.length > 60 ? q.text.slice(0, 60) + '…' : q.text}`
   )
 
   const answerLabels = testDef.questions.map(q => {
@@ -31,11 +31,10 @@ export async function sendTestResultToSheets(params: {
 
   const scoreKeys   = Object.keys(score)
   const scoreValues = Object.values(score).map(v => Math.round(v * 100) / 100)
-
-  const interp = testDef.interpretation(score)
+  const interp      = testDef.interpretation(score)
 
   const payload = {
-    testName:       testDef.name,
+    testName: testDef.name,
     patientName,
     completedAt,
     questionLabels,
@@ -46,13 +45,10 @@ export async function sendTestResultToSheets(params: {
   }
 
   try {
-    // Content-Type: text/plain avoids CORS preflight with Apps Script
-    await fetch(WEBHOOK_URL, {
-      method:  'POST',
-      mode:    'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body:    JSON.stringify(payload),
-    })
+    // GET + URL param avoids the redirect body-loss problem of doPost
+    const url = new URL(WEBHOOK_URL)
+    url.searchParams.set('data', JSON.stringify(payload))
+    await fetch(url.toString(), { mode: 'no-cors' })
   } catch {
     // Silently ignore — Google Sheets sync is non-critical
   }
