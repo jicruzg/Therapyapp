@@ -72,11 +72,11 @@ export default function MoodTrackerPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between pt-1">
         <div>
-          <p className="text-sm font-semibold text-[#f9a825] uppercase tracking-widest mb-1">Bienestar</p>
-          <h1 className="text-3xl font-bold text-[#0d1b2a]">Estado de Ánimo</h1>
-          <p className="text-[#526070] mt-1">Registro diario de bienestar emocional</p>
+          <p className="text-xs font-bold text-[#f9a825] uppercase tracking-[0.15em] mb-1.5">Bienestar</p>
+          <h1 className="text-3xl font-bold text-[#0d1b2a] tracking-tight">Estado de Ánimo</h1>
+          <p className="text-[#526070] mt-1 text-sm">Registro diario de bienestar emocional</p>
         </div>
         <Button onClick={() => { setSelectedMood(todayEntry?.mood ?? 5); setNote(todayEntry?.note ?? ''); setShowModal(true) }} size="sm" className="mt-1 gap-2">
           <Plus size={14} /> {todayEntry ? 'Actualizar hoy' : 'Registrar hoy'}
@@ -85,7 +85,7 @@ export default function MoodTrackerPage() {
 
       {/* Today */}
       {todayEntry && (
-        <div className="bg-[#194067] rounded-2xl p-6 flex items-center gap-5 shadow-[0_4px_24px_rgba(25,64,103,0.2)]">
+        <div className="bg-[#194067] rounded-3xl p-5 sm:p-6 flex items-center gap-5 shadow-[0_8px_32px_rgba(25,64,103,0.28)]">
           <span className="text-5xl">{MOOD_EMOJIS[todayEntry.mood]}</span>
           <div className="flex-1">
             <p className="text-white/60 text-sm font-medium">Hoy te sientes</p>
@@ -170,7 +170,7 @@ export default function MoodTrackerPage() {
 
       <Modal open={showModal} onClose={() => setShowModal(false)} title={`¿Cómo te sientes hoy? ${MOOD_EMOJIS[selectedMood]}`} size="md">
         <div className="space-y-6">
-          <div className="text-center bg-[#f0f4f8] rounded-2xl p-6">
+          <div className="text-center bg-[#f0f4f8] rounded-2xl p-6 sm:p-8">
             <span className="text-7xl mb-3 block">{MOOD_EMOJIS[selectedMood]}</span>
             <p className="text-lg font-bold text-[#0d1b2a] mb-1">{MOOD_LABELS[selectedMood]}</p>
             <p className="text-3xl font-bold" style={{ color: MOOD_COLORS[selectedMood] }}>{selectedMood}<span className="text-lg text-[#8096a7] font-medium">/10</span></p>
@@ -197,7 +197,7 @@ export default function MoodTrackerPage() {
             <label className="text-sm font-semibold text-[#0d1b2a] mb-1.5 block">Nota (opcional)</label>
             <textarea value={note} onChange={e => setNote(e.target.value)}
               placeholder="¿Qué hay en tu mente hoy?" rows={3}
-              className="w-full px-4 py-3 rounded-xl border border-[#dce5ec] text-sm font-medium focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10 resize-none text-[#0d1b2a] placeholder:text-[#8096a7] placeholder:font-normal"
+              className="w-full px-4 py-3 rounded-2xl border border-[#dce5ec] bg-white/80 hover:border-[#b0c8de] text-sm font-medium focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10 resize-none text-[#0d1b2a] placeholder:text-[#8096a7] placeholder:font-normal transition-all duration-200"
             />
           </div>
           <div className="flex gap-3">

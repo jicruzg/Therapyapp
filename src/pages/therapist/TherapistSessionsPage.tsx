@@ -142,11 +142,11 @@ export default function TherapistSessionsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between pt-1">
         <div>
-          <p className="text-sm font-semibold text-[#f9a825] uppercase tracking-widest mb-1">Agenda</p>
-          <h1 className="text-3xl font-bold text-[#0d1b2a]">{lang === 'pt' ? 'Consultas' : 'Citas'}</h1>
-          <p className="text-[#526070] mt-1">{sessions.length} {lang === 'pt' ? 'consultas registradas' : 'citas registradas'}</p>
+          <p className="text-xs font-bold text-[#f9a825] uppercase tracking-[0.15em] mb-1.5">Agenda</p>
+          <h1 className="text-3xl font-bold text-[#0d1b2a] tracking-tight">{lang === 'pt' ? 'Consultas' : 'Citas'}</h1>
+          <p className="text-[#526070] mt-1 text-sm">{sessions.length} {lang === 'pt' ? 'consultas registradas' : 'citas registradas'}</p>
         </div>
         <Button onClick={openRegister} size="sm" className="gap-2 mt-1" disabled={patients.length === 0}>
           <Plus size={14} /> Registrar cita de Zoom
@@ -233,7 +233,7 @@ export default function TherapistSessionsPage() {
       <Modal open={!!showSession} onClose={() => setShowSession(null)} title={lang === 'pt' ? 'Detalhes da consulta' : 'Detalle de cita'} size="md">
         {showSession && (
           <div className="space-y-4">
-            <div className="bg-[#f0f4f8] rounded-xl p-4 space-y-3 text-sm">
+            <div className="bg-[#f0f4f8] rounded-2xl p-5 space-y-3 text-sm">
               {[
                 ['Paciente', showSession.patient?.full_name],
                 ['Fecha', format(new Date(showSession.scheduled_at), "d 'de' MMMM yyyy", { locale })],
@@ -285,7 +285,7 @@ export default function TherapistSessionsPage() {
             <select
               value={regPatientId}
               onChange={e => setRegPatientId(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-[#dce5ec] text-sm font-medium text-[#0d1b2a] focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10 bg-white"
+              className="w-full px-4 py-3 rounded-2xl border border-[#dce5ec] bg-white/80 hover:border-[#b0c8de] text-sm font-medium text-[#0d1b2a] focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10 shadow-[0_1px_3px_rgba(25,64,103,0.05)]"
             >
               {patients.map(p => (
                 <option key={p.id} value={p.id}>{p.full_name}</option>
@@ -301,7 +301,7 @@ export default function TherapistSessionsPage() {
                 value={regDate}
                 min={minDate}
                 onChange={e => { setRegDate(e.target.value); setRegError('') }}
-                className="w-full px-4 py-2.5 rounded-xl border border-[#dce5ec] text-sm font-medium text-[#0d1b2a] focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10"
+                className="w-full px-4 py-3 rounded-2xl border border-[#dce5ec] bg-white/80 hover:border-[#b0c8de] text-sm font-medium text-[#0d1b2a] focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10 shadow-[0_1px_3px_rgba(25,64,103,0.05)]"
               />
             </div>
             <div>
@@ -310,7 +310,7 @@ export default function TherapistSessionsPage() {
                 type="time"
                 value={regTime}
                 onChange={e => { setRegTime(e.target.value); setRegError('') }}
-                className="w-full px-4 py-2.5 rounded-xl border border-[#dce5ec] text-sm font-medium text-[#0d1b2a] focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10"
+                className="w-full px-4 py-3 rounded-2xl border border-[#dce5ec] bg-white/80 hover:border-[#b0c8de] text-sm font-medium text-[#0d1b2a] focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10 shadow-[0_1px_3px_rgba(25,64,103,0.05)]"
               />
             </div>
           </div>
@@ -323,7 +323,7 @@ export default function TherapistSessionsPage() {
             <select
               value={regTimezone}
               onChange={e => setRegTimezone(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-[#dce5ec] text-sm font-medium text-[#0d1b2a] focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10 bg-white"
+              className="w-full px-4 py-3 rounded-2xl border border-[#dce5ec] bg-white/80 hover:border-[#b0c8de] text-sm font-medium text-[#0d1b2a] focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10 shadow-[0_1px_3px_rgba(25,64,103,0.05)]"
             >
               {TIMEZONES.map(tz => (
                 <option key={tz.value} value={tz.value}>{tz.label}</option>
@@ -337,7 +337,7 @@ export default function TherapistSessionsPage() {
             <select
               value={regDuration}
               onChange={e => setRegDuration(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-[#dce5ec] text-sm font-medium text-[#0d1b2a] focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10 bg-white"
+              className="w-full px-4 py-3 rounded-2xl border border-[#dce5ec] bg-white/80 hover:border-[#b0c8de] text-sm font-medium text-[#0d1b2a] focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10 shadow-[0_1px_3px_rgba(25,64,103,0.05)]"
             >
               <option value="30">30 minutos</option>
               <option value="45">45 minutos</option>
