@@ -7,6 +7,7 @@ import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
 import { Modal } from '../../components/ui/Modal'
 import { TESTS } from '../../data/tests'
+import { sendTestResultToSheets } from '../../lib/googleSheets'
 import { ClipboardList, CheckCircle, ChevronRight } from 'lucide-react'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -39,15 +40,24 @@ export default function PatientTestsPage() {
     const testDef = TESTS[activeTest.test_code]
     if (!testDef) return
     setSubmitting(true)
+    const completedAt = new Date().toISOString()
     const score = testDef.scoring(answers)
     const { data } = await supabase.from('assigned_tests').update({
       status: 'completed',
       answers,
       score,
-      completed_at: new Date().toISOString(),
+      completed_at: completedAt,
     }).eq('id', activeTest.id).select().single()
     // Mark notification as read
     await supabase.from('notifications').update({ read: true }).eq('patient_id', patientId!).ilike('message', `%${testDef.name}%`)
+    // Send to Google Sheets (fire-and-forget)
+    sendTestResultToSheets({
+      testDef,
+      answers,
+      score,
+      patientName: profile?.full_name ?? 'Paciente',
+      completedAt,
+    })
     setTests(prev => prev.map(t => t.id === activeTest.id ? data : t))
     setSubmitting(false)
     setActiveTest(null)
