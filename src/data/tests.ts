@@ -369,4 +369,812 @@ export const TESTS: Record<string, TestDefinition> = {
       return { label: 'Sintomatología leve o ausente', color: 'green', description: 'Puntuación baja en síntomas de TLP.' }
     }
   },
+
+  CFQ: {
+    code: 'CFQ',
+    name: 'CFQ-7',
+    description: 'Cuestionario de Fusión Cognitiva',
+    instructions: 'A continuación encontrará una lista de afirmaciones. Por favor, puntúe cada una de ellas según cuánto se aplica a usted usando la escala del 1 (nunca es verdad) al 7 (siempre es verdad).',
+    questions: [
+      { id: 1, text: 'Mis pensamientos hacen que me sea difícil vivir la vida que quiero vivir.', options: [
+        { value: 1, label: '1 - Nunca es verdad' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces es verdad' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre es verdad' }
+      ]},
+      { id: 2, text: 'Me quedo tan atrapado/a en mis pensamientos que soy incapaz de hacer las cosas que más me importan.', options: [
+        { value: 1, label: '1 - Nunca es verdad' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces es verdad' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre es verdad' }
+      ]},
+      { id: 3, text: 'Me preocupo demasiado por los pensamientos que tengo.', options: [
+        { value: 1, label: '1 - Nunca es verdad' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces es verdad' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre es verdad' }
+      ]},
+      { id: 4, text: 'Mis pensamientos son los que mandan en mi vida.', options: [
+        { value: 1, label: '1 - Nunca es verdad' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces es verdad' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre es verdad' }
+      ]},
+      { id: 5, text: 'Me identifico con mis pensamientos al punto de que se convierten en "yo".', options: [
+        { value: 1, label: '1 - Nunca es verdad' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces es verdad' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre es verdad' }
+      ]},
+      { id: 6, text: 'No me distancio de mis pensamientos.', options: [
+        { value: 1, label: '1 - Nunca es verdad' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces es verdad' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre es verdad' }
+      ]},
+      { id: 7, text: 'Sigo creyendo en mis pensamientos negativos incluso cuando sé que no sirven de nada.', options: [
+        { value: 1, label: '1 - Nunca es verdad' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces es verdad' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre es verdad' }
+      ]},
+    ],
+    scoring: (answers) => {
+      const total = Object.values(answers).reduce((s, v) => s + v, 0)
+      return { total }
+    },
+    interpretation: (scores) => {
+      const { total } = scores
+      if (total >= 29) return { label: 'Fusión cognitiva elevada', color: 'red', description: 'Puntuación alta: los pensamientos influyen notablemente en el comportamiento. Se recomienda trabajo en defusión cognitiva.' }
+      if (total >= 17) return { label: 'Fusión cognitiva moderada', color: 'yellow', description: 'Nivel moderado de fusión cognitiva.' }
+      return { label: 'Fusión cognitiva baja', color: 'green', description: 'Bajo nivel de fusión cognitiva.' }
+    }
+  },
+
+  BEAQ: {
+    code: 'BEAQ',
+    name: 'BEAQ-15',
+    description: 'Cuestionario Breve de Evitación Experiencial',
+    instructions: 'A continuación hay una serie de afirmaciones. Por favor, puntúe cada una según cuánto se aplica a usted, usando la escala del 1 (completamente en desacuerdo) al 6 (completamente de acuerdo).',
+    questions: [
+      { id: 1, text: 'Mis sentimientos negativos me impiden vivir una vida plena.', options: [
+        { value: 1, label: '1 - Completamente en desacuerdo' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5' }, { value: 6, label: '6 - Completamente de acuerdo' }
+      ]},
+      { id: 2, text: 'Tengo miedo de mis sentimientos.', options: [
+        { value: 1, label: '1 - Completamente en desacuerdo' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5' }, { value: 6, label: '6 - Completamente de acuerdo' }
+      ]},
+      { id: 3, text: 'Me preocupa no poder controlar mis preocupaciones y sentimientos.', options: [
+        { value: 1, label: '1 - Completamente en desacuerdo' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5' }, { value: 6, label: '6 - Completamente de acuerdo' }
+      ]},
+      { id: 4, text: 'Recuerdos dolorosos me impiden tener una vida plena.', options: [
+        { value: 1, label: '1 - Completamente en desacuerdo' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5' }, { value: 6, label: '6 - Completamente de acuerdo' }
+      ]},
+      { id: 5, text: 'Evito situaciones que me hacen sentir incómodo/a o ansioso/a.', options: [
+        { value: 1, label: '1 - Completamente en desacuerdo' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5' }, { value: 6, label: '6 - Completamente de acuerdo' }
+      ]},
+      { id: 6, text: 'No puedo dejar de pensar en cosas que me han sucedido.', options: [
+        { value: 1, label: '1 - Completamente en desacuerdo' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5' }, { value: 6, label: '6 - Completamente de acuerdo' }
+      ]},
+      { id: 7, text: 'Mis emociones interfieren con cómo me gustaría comportarme en mi vida.', options: [
+        { value: 1, label: '1 - Completamente en desacuerdo' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5' }, { value: 6, label: '6 - Completamente de acuerdo' }
+      ]},
+      { id: 8, text: 'Me digo a mí mismo/a que no debo sentirme como me siento.', options: [
+        { value: 1, label: '1 - Completamente en desacuerdo' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5' }, { value: 6, label: '6 - Completamente de acuerdo' }
+      ]},
+      { id: 9, text: 'Evito pensar en cosas perturbadoras.', options: [
+        { value: 1, label: '1 - Completamente en desacuerdo' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5' }, { value: 6, label: '6 - Completamente de acuerdo' }
+      ]},
+      { id: 10, text: 'Las emociones negativas son malas y hay que librarse de ellas.', options: [
+        { value: 1, label: '1 - Completamente en desacuerdo' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5' }, { value: 6, label: '6 - Completamente de acuerdo' }
+      ]},
+      { id: 11, text: 'No actúo de acuerdo con mis valores cuando siento emociones negativas.', options: [
+        { value: 1, label: '1 - Completamente en desacuerdo' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5' }, { value: 6, label: '6 - Completamente de acuerdo' }
+      ]},
+      { id: 12, text: 'Trato de alejarme de los sentimientos desagradables que tengo.', options: [
+        { value: 1, label: '1 - Completamente en desacuerdo' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5' }, { value: 6, label: '6 - Completamente de acuerdo' }
+      ]},
+      { id: 13, text: 'Las memorias del pasado dolorosas me preocupan todavía.', options: [
+        { value: 1, label: '1 - Completamente en desacuerdo' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5' }, { value: 6, label: '6 - Completamente de acuerdo' }
+      ]},
+      { id: 14, text: 'Es difícil para mí estar presente cuando tengo sentimientos desagradables.', options: [
+        { value: 1, label: '1 - Completamente en desacuerdo' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5' }, { value: 6, label: '6 - Completamente de acuerdo' }
+      ]},
+      { id: 15, text: 'Si no puedo dejar de tener un mal sentimiento, me pongo muy angustiado/a.', options: [
+        { value: 1, label: '1 - Completamente en desacuerdo' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5' }, { value: 6, label: '6 - Completamente de acuerdo' }
+      ]},
+    ],
+    scoring: (answers) => {
+      const total = Object.values(answers).reduce((s, v) => s + v, 0)
+      return { total }
+    },
+    interpretation: (scores) => {
+      const { total } = scores
+      if (total >= 60) return { label: 'Evitación experiencial alta', color: 'red', description: 'Nivel elevado de evitación experiencial. Se recomienda trabajar en la aceptación de experiencias internas.' }
+      if (total >= 40) return { label: 'Evitación experiencial moderada', color: 'yellow', description: 'Nivel moderado de evitación experiencial.' }
+      return { label: 'Evitación experiencial baja', color: 'green', description: 'Bajo nivel de evitación experiencial.' }
+    }
+  },
+
+  CompACT: {
+    code: 'CompACT',
+    name: 'CompACT',
+    description: 'Cuestionario Comprensivo de Flexibilidad Psicológica',
+    instructions: 'A continuación encontrará una serie de afirmaciones. Indique en qué medida cada una es cierta para usted, usando la escala del 1 (nunca es cierto) al 7 (siempre es cierto). Algunas preguntas están formuladas de forma inversa.',
+    questions: [
+      { id: 1, text: 'Continúo haciendo lo que es importante para mí, incluso cuando me siento mal.', subscale: 'openness', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 2, text: 'Soy capaz de tomar perspectiva de mis propios pensamientos.', subscale: 'awareness', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 3, text: 'Mis pensamientos y sentimientos negativos interfieren con mi vida.', subscale: 'openness', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 4, text: 'Me comprometo con acciones que reflejan mis valores.', subscale: 'action', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 5, text: 'Evito situaciones que me producen ansiedad o malestar.', subscale: 'openness', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 6, text: 'Soy consciente de lo que está ocurriendo dentro de mí en cada momento.', subscale: 'awareness', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 7, text: 'Me quedo atrapado/a en mis pensamientos negativos.', subscale: 'openness', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 8, text: 'Sé qué es lo más importante para mí en la vida.', subscale: 'action', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 9, text: 'Estoy presente en el momento actual, sin distraerme con el pasado o el futuro.', subscale: 'awareness', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 10, text: 'Mis emociones negativas me bloquean para actuar conforme a mis valores.', subscale: 'action', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 11, text: 'Trato de entender mis pensamientos y sentimientos desde una perspectiva más amplia.', subscale: 'awareness', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 12, text: 'Me es difícil aceptar las experiencias difíciles que tengo.', subscale: 'openness', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 13, text: 'Actúo de acuerdo con lo que es importante para mí, aunque sea incómodo.', subscale: 'action', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 14, text: 'Me preocupo por cosas que no puedo controlar.', subscale: 'openness', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 15, text: 'Soy consciente de mis pensamientos sin quedar atrapado/a en ellos.', subscale: 'awareness', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 16, text: 'Persisto en mis metas a largo plazo, a pesar de las dificultades.', subscale: 'action', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 17, text: 'Me dejo dominar por mis sentimientos.', subscale: 'openness', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 18, text: 'Presto atención plena a lo que hago en cada momento.', subscale: 'awareness', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 19, text: 'Mi vida está guiada por mis valores personales.', subscale: 'action', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 20, text: 'Me resulta difícil aceptar emociones dolorosas.', subscale: 'openness', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 21, text: 'Noto mis pensamientos y sentimientos sin juzgarlos.', subscale: 'awareness', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 22, text: 'Actúo con propósito, incluso cuando las cosas son difíciles.', subscale: 'action', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+      { id: 23, text: 'Me resulta difícil mantenerme enfocado/a en lo que hago.', subscale: 'awareness', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4 - A veces' }, { value: 5, label: '5' }, { value: 6, label: '6' },
+        { value: 7, label: '7 - Siempre' }
+      ]},
+    ],
+    scoring: (answers) => {
+      const openItems = [1, 3, 5, 7, 12, 14, 17, 20]
+      const awarenessItems = [2, 6, 9, 11, 15, 18, 21, 23]
+      const actionItems = [4, 8, 10, 13, 16, 19, 22]
+      const openness = openItems.reduce((s, i) => s + (answers[i] ?? 0), 0)
+      const awareness = awarenessItems.reduce((s, i) => s + (answers[i] ?? 0), 0)
+      const action = actionItems.reduce((s, i) => s + (answers[i] ?? 0), 0)
+      const total = openness + awareness + action
+      return { openness, awareness, action, total }
+    },
+    interpretation: (scores) => {
+      const { total } = scores
+      if (total >= 120) return { label: 'Alta flexibilidad psicológica', color: 'green', description: 'Puntuación alta: buena capacidad de aceptación, conciencia y acción comprometida.' }
+      if (total >= 80) return { label: 'Flexibilidad psicológica moderada', color: 'yellow', description: 'Nivel moderado. Hay áreas de flexibilidad psicológica a desarrollar.' }
+      return { label: 'Baja flexibilidad psicológica', color: 'red', description: 'Puntuación baja. Se recomienda trabajo en aceptación, mindfulness y valores.' }
+    }
+  },
+
+  PG13: {
+    code: 'PG13',
+    name: 'PG-13',
+    description: 'Escala de Duelo Prolongado-13',
+    instructions: 'Este cuestionario hace referencia a la pérdida de un ser querido. Por favor, indique en qué medida ha experimentado cada uno de los siguientes síntomas en el último mes.',
+    questions: [
+      { id: 1, text: '¿Con qué frecuencia experimenta una añoranza o anhelo doloroso por la persona fallecida?', options: [
+        { value: 1, label: '1 - Casi nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5 - Al menos una vez al día' }
+      ]},
+      { id: 2, text: '¿Con qué frecuencia tiene dificultades para aceptar la muerte?', options: [
+        { value: 1, label: '1 - No en absoluto' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5 - Abrumadoramente' }
+      ]},
+      { id: 3, text: '¿Con qué frecuencia experimenta una sensación de que la vida no tiene sentido sin el fallecido?', options: [
+        { value: 1, label: '1 - No en absoluto' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5 - Abrumadoramente' }
+      ]},
+      { id: 4, text: '¿Con qué frecuencia siente que una parte de sí mismo/a murió junto con el fallecido?', options: [
+        { value: 1, label: '1 - No en absoluto' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5 - Completamente' }
+      ]},
+      { id: 5, text: '¿Con qué frecuencia evita los recordatorios de que el fallecido ha muerto?', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5 - Siempre' }
+      ]},
+      { id: 6, text: '¿Con qué frecuencia le resulta difícil confiar en otras personas desde la pérdida?', options: [
+        { value: 1, label: '1 - No en absoluto' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5 - Extremadamente' }
+      ]},
+      { id: 7, text: '¿Con qué frecuencia siente amargura o rabia relacionada con la pérdida?', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5 - Extremadamente' }
+      ]},
+      { id: 8, text: '¿Con qué frecuencia tiene dificultades para relacionarse con otras personas o implicarse en actividades desde la muerte?', options: [
+        { value: 1, label: '1 - No en absoluto' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5 - Extremadamente' }
+      ]},
+      { id: 9, text: '¿Con qué frecuencia experimenta dolor emocional, pena o angustia relacionada con el fallecido?', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5 - Abrumadoramente' }
+      ]},
+      { id: 10, text: '¿Con qué frecuencia oye la voz del fallecido o lo ve?', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5 - Continuamente' }
+      ]},
+      { id: 11, text: '¿Con qué frecuencia siente que el mundo parece vacío y sin sentido sin el fallecido?', options: [
+        { value: 1, label: '1 - No en absoluto' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5 - Completamente' }
+      ]},
+      { id: 12, text: '¿Con qué frecuencia nota que los síntomas de duelo interfieren con su capacidad de trabajo, sus actividades sociales u otras áreas importantes de su vida?', options: [
+        { value: 1, label: '1 - No en absoluto' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5 - Extremadamente' }
+      ]},
+      { id: 13, text: '¿Con qué frecuencia experimenta entumecimiento emocional (sentirse distante o desconectado de las propias emociones) desde la muerte?', options: [
+        { value: 1, label: '1 - Nunca' }, { value: 2, label: '2' }, { value: 3, label: '3' },
+        { value: 4, label: '4' }, { value: 5, label: '5 - Constantemente' }
+      ]},
+    ],
+    scoring: (answers) => {
+      const total = Object.values(answers).reduce((s, v) => s + v, 0)
+      return { total }
+    },
+    interpretation: (scores) => {
+      const { total } = scores
+      if (total >= 35) return { label: 'Duelo prolongado probable', color: 'red', description: 'Puntuación elevada. Se sugiere evaluación clínica especializada en duelo complicado.' }
+      if (total >= 25) return { label: 'Sintomatología de duelo significativa', color: 'yellow', description: 'Presencia notable de síntomas de duelo. Se recomienda acompañamiento terapéutico.' }
+      return { label: 'Duelo en rango normal', color: 'green', description: 'Sintomatología dentro de los parámetros esperados del proceso de duelo.' }
+    }
+  },
+
+  IDCRECEP: {
+    code: 'IDCRECEP',
+    name: 'IDC-R-ECEP',
+    description: 'Inventario de Duelo Complicado Revisado',
+    instructions: 'Las siguientes preguntas hacen referencia a sus pensamientos y sentimientos en torno a la muerte de un ser querido. Por favor, indique con qué frecuencia ha experimentado cada situación durante el último mes.',
+    questions: [
+      { id: 1, text: 'Pienso tanto en la persona fallecida que me resulta difícil hacer las cosas que hago normalmente.', options: [
+        { value: 0, label: 'Nunca' }, { value: 1, label: 'Raramente' }, { value: 2, label: 'A veces' },
+        { value: 3, label: 'Con frecuencia' }, { value: 4, label: 'Siempre' }
+      ]},
+      { id: 2, text: 'Los recuerdos de la persona fallecida me trastornan.', options: [
+        { value: 0, label: 'Nunca' }, { value: 1, label: 'Raramente' }, { value: 2, label: 'A veces' },
+        { value: 3, label: 'Con frecuencia' }, { value: 4, label: 'Siempre' }
+      ]},
+      { id: 3, text: 'Me siento atraído/a hacia lugares y cosas relacionadas con la persona fallecida.', options: [
+        { value: 0, label: 'Nunca' }, { value: 1, label: 'Raramente' }, { value: 2, label: 'A veces' },
+        { value: 3, label: 'Con frecuencia' }, { value: 4, label: 'Siempre' }
+      ]},
+      { id: 4, text: 'Me siento incapaz de aceptar la muerte de la persona fallecida.', options: [
+        { value: 0, label: 'Nunca' }, { value: 1, label: 'Raramente' }, { value: 2, label: 'A veces' },
+        { value: 3, label: 'Con frecuencia' }, { value: 4, label: 'Siempre' }
+      ]},
+      { id: 5, text: 'Desearía estar muerto/a para poder estar con la persona fallecida.', options: [
+        { value: 0, label: 'Nunca' }, { value: 1, label: 'Raramente' }, { value: 2, label: 'A veces' },
+        { value: 3, label: 'Con frecuencia' }, { value: 4, label: 'Siempre' }
+      ]},
+      { id: 6, text: 'Me resulta difícil disfrutar de las cosas desde que murió la persona fallecida.', options: [
+        { value: 0, label: 'Nunca' }, { value: 1, label: 'Raramente' }, { value: 2, label: 'A veces' },
+        { value: 3, label: 'Con frecuencia' }, { value: 4, label: 'Siempre' }
+      ]},
+      { id: 7, text: 'Me siento distante de las personas con las que me preocupaba antes de la muerte.', options: [
+        { value: 0, label: 'Nunca' }, { value: 1, label: 'Raramente' }, { value: 2, label: 'A veces' },
+        { value: 3, label: 'Con frecuencia' }, { value: 4, label: 'Siempre' }
+      ]},
+      { id: 8, text: 'Siento que la vida es vacía sin la persona fallecida.', options: [
+        { value: 0, label: 'Nunca' }, { value: 1, label: 'Raramente' }, { value: 2, label: 'A veces' },
+        { value: 3, label: 'Con frecuencia' }, { value: 4, label: 'Siempre' }
+      ]},
+      { id: 9, text: 'Escucho la voz de la persona fallecida hablándome.', options: [
+        { value: 0, label: 'Nunca' }, { value: 1, label: 'Raramente' }, { value: 2, label: 'A veces' },
+        { value: 3, label: 'Con frecuencia' }, { value: 4, label: 'Siempre' }
+      ]},
+      { id: 10, text: 'Veo a la persona fallecida ante mí.', options: [
+        { value: 0, label: 'Nunca' }, { value: 1, label: 'Raramente' }, { value: 2, label: 'A veces' },
+        { value: 3, label: 'Con frecuencia' }, { value: 4, label: 'Siempre' }
+      ]},
+      { id: 11, text: 'Siento que es injusto que tenga que seguir viviendo mientras que la persona fallecida ha muerto.', options: [
+        { value: 0, label: 'Nunca' }, { value: 1, label: 'Raramente' }, { value: 2, label: 'A veces' },
+        { value: 3, label: 'Con frecuencia' }, { value: 4, label: 'Siempre' }
+      ]},
+      { id: 12, text: 'Siento amargura por la muerte de la persona fallecida.', options: [
+        { value: 0, label: 'Nunca' }, { value: 1, label: 'Raramente' }, { value: 2, label: 'A veces' },
+        { value: 3, label: 'Con frecuencia' }, { value: 4, label: 'Siempre' }
+      ]},
+      { id: 13, text: 'Siento envidia de las personas que no han perdido a nadie cercano.', options: [
+        { value: 0, label: 'Nunca' }, { value: 1, label: 'Raramente' }, { value: 2, label: 'A veces' },
+        { value: 3, label: 'Con frecuencia' }, { value: 4, label: 'Siempre' }
+      ]},
+      { id: 14, text: 'Me siento solo/a gran parte del tiempo desde que murió la persona fallecida.', options: [
+        { value: 0, label: 'Nunca' }, { value: 1, label: 'Raramente' }, { value: 2, label: 'A veces' },
+        { value: 3, label: 'Con frecuencia' }, { value: 4, label: 'Siempre' }
+      ]},
+      { id: 15, text: 'Me resulta difícil confiar en las personas desde que murió la persona fallecida.', options: [
+        { value: 0, label: 'Nunca' }, { value: 1, label: 'Raramente' }, { value: 2, label: 'A veces' },
+        { value: 3, label: 'Con frecuencia' }, { value: 4, label: 'Siempre' }
+      ]},
+      { id: 16, text: 'Me resulta difícil interesarme en las actividades que antes me interesaban.', options: [
+        { value: 0, label: 'Nunca' }, { value: 1, label: 'Raramente' }, { value: 2, label: 'A veces' },
+        { value: 3, label: 'Con frecuencia' }, { value: 4, label: 'Siempre' }
+      ]},
+      { id: 17, text: 'Siento que nada tiene sentido sin la persona fallecida.', options: [
+        { value: 0, label: 'Nunca' }, { value: 1, label: 'Raramente' }, { value: 2, label: 'A veces' },
+        { value: 3, label: 'Con frecuencia' }, { value: 4, label: 'Siempre' }
+      ]},
+      { id: 18, text: 'Siento que el futuro no tiene sentido ni propósito sin la persona fallecida.', options: [
+        { value: 0, label: 'Nunca' }, { value: 1, label: 'Raramente' }, { value: 2, label: 'A veces' },
+        { value: 3, label: 'Con frecuencia' }, { value: 4, label: 'Siempre' }
+      ]},
+      { id: 19, text: 'Me siento aturdido/a o en shock por la muerte de la persona fallecida.', options: [
+        { value: 0, label: 'Nunca' }, { value: 1, label: 'Raramente' }, { value: 2, label: 'A veces' },
+        { value: 3, label: 'Con frecuencia' }, { value: 4, label: 'Siempre' }
+      ]},
+    ],
+    scoring: (answers) => {
+      const total = Object.values(answers).reduce((s, v) => s + v, 0)
+      return { total }
+    },
+    interpretation: (scores) => {
+      const { total } = scores
+      if (total >= 30) return { label: 'Duelo complicado probable', color: 'red', description: 'Puntuación elevada. Se recomienda evaluación clínica especializada para duelo complicado.' }
+      if (total >= 20) return { label: 'Sintomatología de duelo significativa', color: 'yellow', description: 'Presencia de síntomas de duelo que merecen atención terapéutica.' }
+      return { label: 'Duelo en rango normal', color: 'green', description: 'Sintomatología dentro de los parámetros esperados del proceso de duelo.' }
+    }
+  },
+
+  EGD: {
+    code: 'EGD',
+    name: 'EGD',
+    description: 'Escala de Gravedad del Duelo',
+    instructions: 'A continuación encontrará una serie de afirmaciones relacionadas con la pérdida de un ser querido. Por favor, indique en qué medida cada afirmación refleja cómo se ha sentido durante el último mes.',
+    questions: [
+      { id: 1, text: 'Echo terriblemente de menos a la persona fallecida.', options: [
+        { value: 0, label: '0 - Nada' }, { value: 1, label: '1 - Algo' }, { value: 2, label: '2 - Bastante' },
+        { value: 3, label: '3 - Mucho' }, { value: 4, label: '4 - Muchísimo' }
+      ]},
+      { id: 2, text: 'Lloro cuando pienso en la persona fallecida.', options: [
+        { value: 0, label: '0 - Nada' }, { value: 1, label: '1 - Algo' }, { value: 2, label: '2 - Bastante' },
+        { value: 3, label: '3 - Mucho' }, { value: 4, label: '4 - Muchísimo' }
+      ]},
+      { id: 3, text: 'Pienso en la persona fallecida aunque no quiera hacerlo.', options: [
+        { value: 0, label: '0 - Nada' }, { value: 1, label: '1 - Algo' }, { value: 2, label: '2 - Bastante' },
+        { value: 3, label: '3 - Mucho' }, { value: 4, label: '4 - Muchísimo' }
+      ]},
+      { id: 4, text: 'Me siento triste al pensar en la persona fallecida.', options: [
+        { value: 0, label: '0 - Nada' }, { value: 1, label: '1 - Algo' }, { value: 2, label: '2 - Bastante' },
+        { value: 3, label: '3 - Mucho' }, { value: 4, label: '4 - Muchísimo' }
+      ]},
+      { id: 5, text: 'Siento que la ausencia de la persona fallecida es insoportable.', options: [
+        { value: 0, label: '0 - Nada' }, { value: 1, label: '1 - Algo' }, { value: 2, label: '2 - Bastante' },
+        { value: 3, label: '3 - Mucho' }, { value: 4, label: '4 - Muchísimo' }
+      ]},
+      { id: 6, text: 'Me siento culpable por la muerte de la persona fallecida.', options: [
+        { value: 0, label: '0 - Nada' }, { value: 1, label: '1 - Algo' }, { value: 2, label: '2 - Bastante' },
+        { value: 3, label: '3 - Mucho' }, { value: 4, label: '4 - Muchísimo' }
+      ]},
+      { id: 7, text: 'Siento ira o rabia por la muerte de la persona fallecida.', options: [
+        { value: 0, label: '0 - Nada' }, { value: 1, label: '1 - Algo' }, { value: 2, label: '2 - Bastante' },
+        { value: 3, label: '3 - Mucho' }, { value: 4, label: '4 - Muchísimo' }
+      ]},
+      { id: 8, text: 'La muerte de la persona fallecida ha perturbado mi vida profundamente.', options: [
+        { value: 0, label: '0 - Nada' }, { value: 1, label: '1 - Algo' }, { value: 2, label: '2 - Bastante' },
+        { value: 3, label: '3 - Mucho' }, { value: 4, label: '4 - Muchísimo' }
+      ]},
+      { id: 9, text: 'Desde que murió la persona fallecida me siento perdido/a.', options: [
+        { value: 0, label: '0 - Nada' }, { value: 1, label: '1 - Algo' }, { value: 2, label: '2 - Bastante' },
+        { value: 3, label: '3 - Mucho' }, { value: 4, label: '4 - Muchísimo' }
+      ]},
+      { id: 10, text: 'Siento que una parte de mí ha muerto con la persona fallecida.', options: [
+        { value: 0, label: '0 - Nada' }, { value: 1, label: '1 - Algo' }, { value: 2, label: '2 - Bastante' },
+        { value: 3, label: '3 - Mucho' }, { value: 4, label: '4 - Muchísimo' }
+      ]},
+      { id: 11, text: 'Me resulta difícil aceptar que la persona fallecida ya no está.', options: [
+        { value: 0, label: '0 - Nada' }, { value: 1, label: '1 - Algo' }, { value: 2, label: '2 - Bastante' },
+        { value: 3, label: '3 - Mucho' }, { value: 4, label: '4 - Muchísimo' }
+      ]},
+      { id: 12, text: 'Evito hablar de la persona fallecida con otras personas.', options: [
+        { value: 0, label: '0 - Nada' }, { value: 1, label: '1 - Algo' }, { value: 2, label: '2 - Bastante' },
+        { value: 3, label: '3 - Mucho' }, { value: 4, label: '4 - Muchísimo' }
+      ]},
+    ],
+    scoring: (answers) => {
+      const total = Object.values(answers).reduce((s, v) => s + v, 0)
+      return { total }
+    },
+    interpretation: (scores) => {
+      const { total } = scores
+      if (total >= 30) return { label: 'Duelo de alta gravedad', color: 'red', description: 'Puntuación elevada que indica un duelo de alta intensidad. Se recomienda evaluación y apoyo terapéutico especializado.' }
+      if (total >= 18) return { label: 'Duelo de gravedad moderada', color: 'yellow', description: 'Nivel moderado de sintomatología de duelo. Se recomienda acompañamiento terapéutico.' }
+      return { label: 'Duelo de gravedad leve', color: 'green', description: 'Sintomatología de duelo dentro de niveles manejables.' }
+    }
+  },
+
+  SF36: {
+    code: 'SF36',
+    name: 'SF-36',
+    description: 'Cuestionario de Salud SF-36',
+    instructions: 'Este cuestionario le pregunta sobre su salud. Por favor, conteste cada pregunta marcando la respuesta como se indica. Si no está seguro/a de cómo responder, dé la mejor respuesta que pueda.',
+    questions: [
+      { id: 1, text: 'En general, ¿diría que su salud es:', subscale: 'general', options: [
+        { value: 5, label: 'Excelente' }, { value: 4, label: 'Muy buena' }, { value: 3, label: 'Buena' },
+        { value: 2, label: 'Regular' }, { value: 1, label: 'Mala' }
+      ]},
+      { id: 2, text: '¿Cómo diría que es su salud actual, comparada con la de hace un año?', subscale: 'general', options: [
+        { value: 1, label: 'Mucho mejor ahora que hace un año' }, { value: 2, label: 'Algo mejor ahora' },
+        { value: 3, label: 'Más o menos igual' }, { value: 4, label: 'Algo peor ahora' }, { value: 5, label: 'Mucho peor ahora' }
+      ]},
+      { id: 3, text: 'Esfuerzos intensos (como correr, levantar objetos pesados, deportes agotadores): ¿Su salud actual le limita para hacer estas actividades?', subscale: 'physical', options: [
+        { value: 1, label: 'Sí, me limita mucho' }, { value: 2, label: 'Sí, me limita un poco' }, { value: 3, label: 'No, no me limita nada' }
+      ]},
+      { id: 4, text: 'Esfuerzos moderados (como mover una mesa, caminar más de una hora): ¿Su salud actual le limita?', subscale: 'physical', options: [
+        { value: 1, label: 'Sí, me limita mucho' }, { value: 2, label: 'Sí, me limita un poco' }, { value: 3, label: 'No, no me limita nada' }
+      ]},
+      { id: 5, text: 'Coger o llevar la bolsa de la compra: ¿Su salud actual le limita?', subscale: 'physical', options: [
+        { value: 1, label: 'Sí, me limita mucho' }, { value: 2, label: 'Sí, me limita un poco' }, { value: 3, label: 'No, no me limita nada' }
+      ]},
+      { id: 6, text: 'Subir varios pisos por la escalera: ¿Su salud actual le limita?', subscale: 'physical', options: [
+        { value: 1, label: 'Sí, me limita mucho' }, { value: 2, label: 'Sí, me limita un poco' }, { value: 3, label: 'No, no me limita nada' }
+      ]},
+      { id: 7, text: 'Subir un solo piso por la escalera: ¿Su salud actual le limita?', subscale: 'physical', options: [
+        { value: 1, label: 'Sí, me limita mucho' }, { value: 2, label: 'Sí, me limita un poco' }, { value: 3, label: 'No, no me limita nada' }
+      ]},
+      { id: 8, text: 'Agacharse, arrodillarse o ponerse en cuclillas: ¿Su salud actual le limita?', subscale: 'physical', options: [
+        { value: 1, label: 'Sí, me limita mucho' }, { value: 2, label: 'Sí, me limita un poco' }, { value: 3, label: 'No, no me limita nada' }
+      ]},
+      { id: 9, text: 'Caminar más de un kilómetro: ¿Su salud actual le limita?', subscale: 'physical', options: [
+        { value: 1, label: 'Sí, me limita mucho' }, { value: 2, label: 'Sí, me limita un poco' }, { value: 3, label: 'No, no me limita nada' }
+      ]},
+      { id: 10, text: 'Caminar varios centenares de metros: ¿Su salud actual le limita?', subscale: 'physical', options: [
+        { value: 1, label: 'Sí, me limita mucho' }, { value: 2, label: 'Sí, me limita un poco' }, { value: 3, label: 'No, no me limita nada' }
+      ]},
+      { id: 11, text: 'Caminar unos 100 metros: ¿Su salud actual le limita?', subscale: 'physical', options: [
+        { value: 1, label: 'Sí, me limita mucho' }, { value: 2, label: 'Sí, me limita un poco' }, { value: 3, label: 'No, no me limita nada' }
+      ]},
+      { id: 12, text: 'Bañarse o vestirse por sí mismo: ¿Su salud actual le limita?', subscale: 'physical', options: [
+        { value: 1, label: 'Sí, me limita mucho' }, { value: 2, label: 'Sí, me limita un poco' }, { value: 3, label: 'No, no me limita nada' }
+      ]},
+      { id: 13, text: 'Durante las 4 últimas semanas, ¿redujo el tiempo dedicado al trabajo u otras actividades por su salud física?', subscale: 'role_physical', options: [
+        { value: 1, label: 'Sí' }, { value: 2, label: 'No' }
+      ]},
+      { id: 14, text: '¿Hizo menos de lo que hubiera querido hacer por su salud física?', subscale: 'role_physical', options: [
+        { value: 1, label: 'Sí' }, { value: 2, label: 'No' }
+      ]},
+      { id: 15, text: '¿Tuvo que dejar de hacer algunas tareas en el trabajo u otras actividades por su salud física?', subscale: 'role_physical', options: [
+        { value: 1, label: 'Sí' }, { value: 2, label: 'No' }
+      ]},
+      { id: 16, text: '¿Tuvo dificultad para hacer su trabajo u otras actividades por su salud física?', subscale: 'role_physical', options: [
+        { value: 1, label: 'Sí' }, { value: 2, label: 'No' }
+      ]},
+      { id: 17, text: '¿Redujo el tiempo dedicado al trabajo u otras actividades por problemas emocionales?', subscale: 'role_emotional', options: [
+        { value: 1, label: 'Sí' }, { value: 2, label: 'No' }
+      ]},
+      { id: 18, text: '¿Hizo menos de lo que hubiera querido hacer por problemas emocionales?', subscale: 'role_emotional', options: [
+        { value: 1, label: 'Sí' }, { value: 2, label: 'No' }
+      ]},
+      { id: 19, text: '¿No hizo su trabajo u otras actividades tan cuidadosamente como de costumbre por problemas emocionales?', subscale: 'role_emotional', options: [
+        { value: 1, label: 'Sí' }, { value: 2, label: 'No' }
+      ]},
+      { id: 20, text: '¿Con qué frecuencia el dolor le ha dificultado su trabajo habitual (incluido el trabajo fuera de casa y las tareas domésticas)?', subscale: 'pain', options: [
+        { value: 5, label: 'Nada' }, { value: 4, label: 'Un poco' }, { value: 3, label: 'Regular' },
+        { value: 2, label: 'Bastante' }, { value: 1, label: 'Mucho' }
+      ]},
+      { id: 21, text: '¿Cuánto dolor físico ha tenido durante las 4 últimas semanas?', subscale: 'pain', options: [
+        { value: 6, label: 'Ninguno' }, { value: 5, label: 'Muy poco' }, { value: 4, label: 'Un poco' },
+        { value: 3, label: 'Moderado' }, { value: 2, label: 'Mucho' }, { value: 1, label: 'Muchísimo' }
+      ]},
+      { id: 22, text: 'Durante las 4 últimas semanas, ¿cuánto tiempo se sintió lleno/a de vitalidad?', subscale: 'vitality', options: [
+        { value: 6, label: 'Siempre' }, { value: 5, label: 'Casi siempre' }, { value: 4, label: 'Muchas veces' },
+        { value: 3, label: 'Algunas veces' }, { value: 2, label: 'Sólo alguna vez' }, { value: 1, label: 'Nunca' }
+      ]},
+      { id: 23, text: '¿Cuánto tiempo se sintió muy nervioso/a?', subscale: 'mental', options: [
+        { value: 1, label: 'Siempre' }, { value: 2, label: 'Casi siempre' }, { value: 3, label: 'Muchas veces' },
+        { value: 4, label: 'Algunas veces' }, { value: 5, label: 'Sólo alguna vez' }, { value: 6, label: 'Nunca' }
+      ]},
+      { id: 24, text: '¿Cuánto tiempo se sintió tan bajo/a de moral que nada podía animarle?', subscale: 'mental', options: [
+        { value: 1, label: 'Siempre' }, { value: 2, label: 'Casi siempre' }, { value: 3, label: 'Muchas veces' },
+        { value: 4, label: 'Algunas veces' }, { value: 5, label: 'Sólo alguna vez' }, { value: 6, label: 'Nunca' }
+      ]},
+      { id: 25, text: '¿Cuánto tiempo se sintió calmado/a y tranquilo/a?', subscale: 'mental', options: [
+        { value: 6, label: 'Siempre' }, { value: 5, label: 'Casi siempre' }, { value: 4, label: 'Muchas veces' },
+        { value: 3, label: 'Algunas veces' }, { value: 2, label: 'Sólo alguna vez' }, { value: 1, label: 'Nunca' }
+      ]},
+      { id: 26, text: '¿Cuánto tiempo tuvo mucha energía?', subscale: 'vitality', options: [
+        { value: 6, label: 'Siempre' }, { value: 5, label: 'Casi siempre' }, { value: 4, label: 'Muchas veces' },
+        { value: 3, label: 'Algunas veces' }, { value: 2, label: 'Sólo alguna vez' }, { value: 1, label: 'Nunca' }
+      ]},
+      { id: 27, text: '¿Cuánto tiempo se sintió desanimado/a y triste?', subscale: 'mental', options: [
+        { value: 1, label: 'Siempre' }, { value: 2, label: 'Casi siempre' }, { value: 3, label: 'Muchas veces' },
+        { value: 4, label: 'Algunas veces' }, { value: 5, label: 'Sólo alguna vez' }, { value: 6, label: 'Nunca' }
+      ]},
+      { id: 28, text: '¿Cuánto tiempo se sintió agotado/a?', subscale: 'vitality', options: [
+        { value: 1, label: 'Siempre' }, { value: 2, label: 'Casi siempre' }, { value: 3, label: 'Muchas veces' },
+        { value: 4, label: 'Algunas veces' }, { value: 5, label: 'Sólo alguna vez' }, { value: 6, label: 'Nunca' }
+      ]},
+      { id: 29, text: '¿Cuánto tiempo se sintió feliz?', subscale: 'mental', options: [
+        { value: 6, label: 'Siempre' }, { value: 5, label: 'Casi siempre' }, { value: 4, label: 'Muchas veces' },
+        { value: 3, label: 'Algunas veces' }, { value: 2, label: 'Sólo alguna vez' }, { value: 1, label: 'Nunca' }
+      ]},
+      { id: 30, text: '¿Cuánto tiempo se sintió cansado/a?', subscale: 'vitality', options: [
+        { value: 1, label: 'Siempre' }, { value: 2, label: 'Casi siempre' }, { value: 3, label: 'Muchas veces' },
+        { value: 4, label: 'Algunas veces' }, { value: 5, label: 'Sólo alguna vez' }, { value: 6, label: 'Nunca' }
+      ]},
+      { id: 31, text: '¿Con qué frecuencia su salud física o los problemas emocionales han dificultado sus actividades sociales?', subscale: 'social', options: [
+        { value: 5, label: 'Siempre' }, { value: 4, label: 'Casi siempre' }, { value: 3, label: 'Algunas veces' },
+        { value: 2, label: 'Sólo alguna vez' }, { value: 1, label: 'Nunca' }
+      ]},
+      { id: 32, text: '¿Durante cuánto tiempo su salud física o problemas emocionales han dificultado sus actividades sociales?', subscale: 'social', options: [
+        { value: 1, label: 'Siempre' }, { value: 2, label: 'Casi siempre' }, { value: 3, label: 'Algunas veces' },
+        { value: 4, label: 'Sólo alguna vez' }, { value: 5, label: 'Nunca' }
+      ]},
+      { id: 33, text: 'Creo que me pongo enfermo/a más fácilmente que otras personas.', subscale: 'general', options: [
+        { value: 1, label: 'Totalmente cierta' }, { value: 2, label: 'Bastante cierta' }, { value: 3, label: 'No lo sé' },
+        { value: 4, label: 'Bastante falsa' }, { value: 5, label: 'Totalmente falsa' }
+      ]},
+      { id: 34, text: 'Estoy tan sano/a como cualquiera.', subscale: 'general', options: [
+        { value: 5, label: 'Totalmente cierta' }, { value: 4, label: 'Bastante cierta' }, { value: 3, label: 'No lo sé' },
+        { value: 2, label: 'Bastante falsa' }, { value: 1, label: 'Totalmente falsa' }
+      ]},
+      { id: 35, text: 'Creo que mi salud va a empeorar.', subscale: 'general', options: [
+        { value: 1, label: 'Totalmente cierta' }, { value: 2, label: 'Bastante cierta' }, { value: 3, label: 'No lo sé' },
+        { value: 4, label: 'Bastante falsa' }, { value: 5, label: 'Totalmente falsa' }
+      ]},
+      { id: 36, text: 'Mi salud es excelente.', subscale: 'general', options: [
+        { value: 5, label: 'Totalmente cierta' }, { value: 4, label: 'Bastante cierta' }, { value: 3, label: 'No lo sé' },
+        { value: 2, label: 'Bastante falsa' }, { value: 1, label: 'Totalmente falsa' }
+      ]},
+    ],
+    scoring: (answers) => {
+      const physItems = [3,4,5,6,7,8,9,10,11,12]
+      const rolePhysItems = [13,14,15,16]
+      const roleEmoItems = [17,18,19]
+      const socialItems = [31,32]
+      const painItems = [20,21]
+      const mentalItems = [23,24,25,27,29]
+      const vitalityItems = [22,26,28,30]
+      const generalItems = [1,33,34,35,36]
+
+      const avg = (items: number[]) => {
+        const vals = items.map(i => answers[i] ?? 0)
+        return Math.round((vals.reduce((s,v)=>s+v,0) / items.length) * 10) / 10
+      }
+      return {
+        physical: avg(physItems),
+        role_physical: avg(rolePhysItems),
+        role_emotional: avg(roleEmoItems),
+        social: avg(socialItems),
+        pain: avg(painItems),
+        mental: avg(mentalItems),
+        vitality: avg(vitalityItems),
+        general: avg(generalItems),
+      }
+    },
+    interpretation: (scores) => {
+      const overall = Math.round(Object.values(scores).reduce((s,v)=>s+v,0) / Object.values(scores).length * 10) / 10
+      if (overall >= 4) return { label: 'Buena calidad de vida', color: 'green', description: 'Puntuación global alta en calidad de vida relacionada con la salud.' }
+      if (overall >= 2.5) return { label: 'Calidad de vida moderada', color: 'yellow', description: 'Nivel moderado de calidad de vida. Hay áreas a mejorar.' }
+      return { label: 'Calidad de vida baja', color: 'red', description: 'Puntuación global baja. Se recomienda atención médica y psicológica integral.' }
+    }
+  },
+
+  WHOQOLBREF: {
+    code: 'WHOQOLBREF',
+    name: 'WHOQOL-BREF',
+    description: 'Cuestionario de Calidad de Vida de la OMS (versión abreviada)',
+    instructions: 'Este cuestionario le pregunta cómo se siente sobre su calidad de vida, salud, y otras áreas de su vida. Por favor, responda a todas las preguntas. Si no está seguro/a sobre qué respuesta dar a una pregunta, escoja la que le parezca más apropiada. Las preguntas se refieren a las dos últimas semanas.',
+    questions: [
+      { id: 1, text: '¿Cómo puntuaría su calidad de vida?', subscale: 'general', options: [
+        { value: 1, label: 'Muy mala' }, { value: 2, label: 'Poco' }, { value: 3, label: 'Normal' },
+        { value: 4, label: 'Bastante bien' }, { value: 5, label: 'Muy bien' }
+      ]},
+      { id: 2, text: '¿Cuán satisfecho/a está con su salud?', subscale: 'general', options: [
+        { value: 1, label: 'Muy insatisfecho/a' }, { value: 2, label: 'Poco' }, { value: 3, label: 'Normal' },
+        { value: 4, label: 'Bastante satisfecho/a' }, { value: 5, label: 'Muy satisfecho/a' }
+      ]},
+      { id: 3, text: '¿Hasta qué punto piensa que el dolor físico le impide hacer lo que necesita?', subscale: 'physical', options: [
+        { value: 5, label: 'Nada' }, { value: 4, label: 'Un poco' }, { value: 3, label: 'Moderado' },
+        { value: 2, label: 'Bastante' }, { value: 1, label: 'Extremadamente' }
+      ]},
+      { id: 4, text: '¿Cuánto necesita de tratamiento médico para funcionar en su vida diaria?', subscale: 'physical', options: [
+        { value: 5, label: 'Nada' }, { value: 4, label: 'Un poco' }, { value: 3, label: 'Moderado' },
+        { value: 2, label: 'Bastante' }, { value: 1, label: 'Extremadamente' }
+      ]},
+      { id: 5, text: '¿Cuánto disfruta de la vida?', subscale: 'psychological', options: [
+        { value: 1, label: 'Nada' }, { value: 2, label: 'Un poco' }, { value: 3, label: 'Moderado' },
+        { value: 4, label: 'Bastante' }, { value: 5, label: 'Extremadamente' }
+      ]},
+      { id: 6, text: '¿En qué medida siente que su vida tiene sentido?', subscale: 'psychological', options: [
+        { value: 1, label: 'Nada' }, { value: 2, label: 'Un poco' }, { value: 3, label: 'Moderado' },
+        { value: 4, label: 'Bastante' }, { value: 5, label: 'Extremadamente' }
+      ]},
+      { id: 7, text: '¿Cuál es su capacidad de concentración?', subscale: 'psychological', options: [
+        { value: 1, label: 'Nada' }, { value: 2, label: 'Un poco' }, { value: 3, label: 'Moderado' },
+        { value: 4, label: 'Bastante' }, { value: 5, label: 'Extremadamente' }
+      ]},
+      { id: 8, text: '¿Cuánta seguridad siente en su vida diaria?', subscale: 'environment', options: [
+        { value: 1, label: 'Nada' }, { value: 2, label: 'Un poco' }, { value: 3, label: 'Moderado' },
+        { value: 4, label: 'Bastante' }, { value: 5, label: 'Extremadamente' }
+      ]},
+      { id: 9, text: '¿Cuán saludable es el ambiente físico a su alrededor?', subscale: 'environment', options: [
+        { value: 1, label: 'Nada' }, { value: 2, label: 'Un poco' }, { value: 3, label: 'Moderado' },
+        { value: 4, label: 'Bastante' }, { value: 5, label: 'Extremadamente' }
+      ]},
+      { id: 10, text: '¿Tiene energía suficiente para la vida diaria?', subscale: 'physical', options: [
+        { value: 1, label: 'Nada' }, { value: 2, label: 'Un poco' }, { value: 3, label: 'Moderado' },
+        { value: 4, label: 'Bastante' }, { value: 5, label: 'Completamente' }
+      ]},
+      { id: 11, text: '¿Es capaz de aceptar su apariencia física?', subscale: 'psychological', options: [
+        { value: 1, label: 'Nada' }, { value: 2, label: 'Un poco' }, { value: 3, label: 'Moderado' },
+        { value: 4, label: 'Bastante' }, { value: 5, label: 'Completamente' }
+      ]},
+      { id: 12, text: '¿Tiene suficiente dinero para cubrir sus necesidades?', subscale: 'environment', options: [
+        { value: 1, label: 'Nada' }, { value: 2, label: 'Un poco' }, { value: 3, label: 'Moderado' },
+        { value: 4, label: 'Bastante' }, { value: 5, label: 'Completamente' }
+      ]},
+      { id: 13, text: '¿Qué disponibilidad tiene de la información que necesita en su vida diaria?', subscale: 'environment', options: [
+        { value: 1, label: 'Nada' }, { value: 2, label: 'Un poco' }, { value: 3, label: 'Moderado' },
+        { value: 4, label: 'Bastante' }, { value: 5, label: 'Completamente' }
+      ]},
+      { id: 14, text: '¿Hasta qué punto tiene oportunidad para realizar actividades de ocio?', subscale: 'environment', options: [
+        { value: 1, label: 'Nada' }, { value: 2, label: 'Un poco' }, { value: 3, label: 'Moderado' },
+        { value: 4, label: 'Bastante' }, { value: 5, label: 'Completamente' }
+      ]},
+      { id: 15, text: '¿Es capaz de desplazarse de un lugar a otro?', subscale: 'physical', options: [
+        { value: 1, label: 'Nada' }, { value: 2, label: 'Un poco' }, { value: 3, label: 'Moderado' },
+        { value: 4, label: 'Bastante' }, { value: 5, label: 'Completamente' }
+      ]},
+      { id: 16, text: '¿Cuán satisfecho/a está con su sueño?', subscale: 'physical', options: [
+        { value: 1, label: 'Muy insatisfecho/a' }, { value: 2, label: 'Poco' }, { value: 3, label: 'Normal' },
+        { value: 4, label: 'Bastante satisfecho/a' }, { value: 5, label: 'Muy satisfecho/a' }
+      ]},
+      { id: 17, text: '¿Cuán satisfecho/a está con su habilidad para realizar sus actividades de la vida diaria?', subscale: 'physical', options: [
+        { value: 1, label: 'Muy insatisfecho/a' }, { value: 2, label: 'Poco' }, { value: 3, label: 'Normal' },
+        { value: 4, label: 'Bastante satisfecho/a' }, { value: 5, label: 'Muy satisfecho/a' }
+      ]},
+      { id: 18, text: '¿Cuán satisfecho/a está con su capacidad de trabajo?', subscale: 'physical', options: [
+        { value: 1, label: 'Muy insatisfecho/a' }, { value: 2, label: 'Poco' }, { value: 3, label: 'Normal' },
+        { value: 4, label: 'Bastante satisfecho/a' }, { value: 5, label: 'Muy satisfecho/a' }
+      ]},
+      { id: 19, text: '¿Cuán satisfecho/a está consigo mismo/a?', subscale: 'psychological', options: [
+        { value: 1, label: 'Muy insatisfecho/a' }, { value: 2, label: 'Poco' }, { value: 3, label: 'Normal' },
+        { value: 4, label: 'Bastante satisfecho/a' }, { value: 5, label: 'Muy satisfecho/a' }
+      ]},
+      { id: 20, text: '¿Cuán satisfecho/a está con sus relaciones personales?', subscale: 'social', options: [
+        { value: 1, label: 'Muy insatisfecho/a' }, { value: 2, label: 'Poco' }, { value: 3, label: 'Normal' },
+        { value: 4, label: 'Bastante satisfecho/a' }, { value: 5, label: 'Muy satisfecho/a' }
+      ]},
+      { id: 21, text: '¿Cuán satisfecho/a está con su vida sexual?', subscale: 'social', options: [
+        { value: 1, label: 'Muy insatisfecho/a' }, { value: 2, label: 'Poco' }, { value: 3, label: 'Normal' },
+        { value: 4, label: 'Bastante satisfecho/a' }, { value: 5, label: 'Muy satisfecho/a' }
+      ]},
+      { id: 22, text: '¿Cuán satisfecho/a está con el apoyo que obtiene de sus amigos?', subscale: 'social', options: [
+        { value: 1, label: 'Muy insatisfecho/a' }, { value: 2, label: 'Poco' }, { value: 3, label: 'Normal' },
+        { value: 4, label: 'Bastante satisfecho/a' }, { value: 5, label: 'Muy satisfecho/a' }
+      ]},
+      { id: 23, text: '¿Cuán satisfecho/a está con las condiciones del lugar donde vive?', subscale: 'environment', options: [
+        { value: 1, label: 'Muy insatisfecho/a' }, { value: 2, label: 'Poco' }, { value: 3, label: 'Normal' },
+        { value: 4, label: 'Bastante satisfecho/a' }, { value: 5, label: 'Muy satisfecho/a' }
+      ]},
+      { id: 24, text: '¿Cuán satisfecho/a está con el acceso que tiene a los servicios sanitarios?', subscale: 'environment', options: [
+        { value: 1, label: 'Muy insatisfecho/a' }, { value: 2, label: 'Poco' }, { value: 3, label: 'Normal' },
+        { value: 4, label: 'Bastante satisfecho/a' }, { value: 5, label: 'Muy satisfecho/a' }
+      ]},
+      { id: 25, text: '¿Cuán satisfecho/a está con los servicios de transporte de su zona?', subscale: 'environment', options: [
+        { value: 1, label: 'Muy insatisfecho/a' }, { value: 2, label: 'Poco' }, { value: 3, label: 'Normal' },
+        { value: 4, label: 'Bastante satisfecho/a' }, { value: 5, label: 'Muy satisfecho/a' }
+      ]},
+      { id: 26, text: '¿Con qué frecuencia tiene sentimientos negativos, tales como tristeza, desesperanza, ansiedad o depresión?', subscale: 'psychological', options: [
+        { value: 5, label: 'Nunca' }, { value: 4, label: 'Raramente' }, { value: 3, label: 'A veces' },
+        { value: 2, label: 'Frecuentemente' }, { value: 1, label: 'Siempre' }
+      ]},
+    ],
+    scoring: (answers) => {
+      const physItems = [3,4,10,15,16,17,18]
+      const psyItems = [5,6,7,11,19,26]
+      const socItems = [20,21,22]
+      const envItems = [8,9,12,13,14,23,24,25]
+      const avg = (items: number[]) => {
+        const vals = items.map(i => answers[i] ?? 0)
+        return Math.round((vals.reduce((s,v)=>s+v,0) / items.length) * 10) / 10
+      }
+      return {
+        physical: avg(physItems),
+        psychological: avg(psyItems),
+        social: avg(socItems),
+        environment: avg(envItems),
+      }
+    },
+    interpretation: (scores) => {
+      const overall = Math.round(Object.values(scores).reduce((s,v)=>s+v,0) / 4 * 10) / 10
+      if (overall >= 4) return { label: 'Buena calidad de vida', color: 'green', description: 'Puntuación global alta en las cuatro dimensiones de calidad de vida.' }
+      if (overall >= 3) return { label: 'Calidad de vida moderada', color: 'yellow', description: 'Calidad de vida en nivel medio. Hay áreas que pueden beneficiarse de intervención.' }
+      return { label: 'Calidad de vida baja', color: 'red', description: 'Puntuación global baja. Se recomienda atención integral en salud física, psicológica y social.' }
+    }
+  },
 }
