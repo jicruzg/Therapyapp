@@ -77,7 +77,7 @@ export default function PatientTestsPage() {
           <button onClick={() => { setActiveTest(null); setAnswers({}) }} className="text-sm text-[#526070] hover:text-[#194067] mb-3 flex items-center gap-1 font-medium transition-colors">
             ← Volver
           </button>
-          <p className="text-sm font-semibold text-[#f9a825] uppercase tracking-widest mb-1">Evaluación</p>
+          <p className="text-xs font-bold text-[#f9a825] uppercase tracking-[0.15em] mb-1.5">Evaluación</p>
           <h1 className="text-2xl font-bold text-[#0d1b2a]">{testDef.name}</h1>
           <p className="text-[#526070] text-sm mt-1">{testDef.description}</p>
         </div>
@@ -106,8 +106,8 @@ export default function PatientTestsPage() {
               </p>
               <div className="space-y-2">
                 {q.options.map(opt => (
-                  <label key={opt.value} className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all border ${
-                    answers[q.id] === opt.value ? 'bg-[#e8f0f7] border-[#194067]/30' : 'border-[#dce5ec] hover:border-[#194067]/20'
+                  <label key={opt.value} className={`flex items-center gap-3 p-3.5 rounded-2xl cursor-pointer transition-all border ${
+                    answers[q.id] === opt.value ? 'bg-[#e8f0f7] border-[#194067]/30 shadow-[inset_0_1px_3px_rgba(25,64,103,0.06)]' : 'border-[#dce5ec] hover:border-[#b0c8de] hover:bg-[#f8fafc]'
                   }`}>
                     <input
                       type="radio"
@@ -138,19 +138,19 @@ export default function PatientTestsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-sm font-semibold text-[#f9a825] uppercase tracking-widest mb-1">Evaluaciones</p>
-        <h1 className="text-3xl font-bold text-[#0d1b2a]">Pruebas</h1>
-        <p className="text-[#526070] mt-1">Evaluaciones asignadas por tu terapeuta</p>
+        <p className="text-xs font-bold text-[#f9a825] uppercase tracking-[0.15em] mb-1.5">Evaluaciones</p>
+        <h1 className="text-3xl font-bold text-[#0d1b2a] tracking-tight">Pruebas</h1>
+        <p className="text-[#526070] mt-1 text-sm">Evaluaciones asignadas por tu terapeuta</p>
       </div>
 
       {pending.length > 0 && (
         <div>
-          <h2 className="font-semibold text-[#526070] mb-3 text-sm uppercase tracking-wider">Pendientes</h2>
+          <h2 className="text-xs font-bold text-[#526070] uppercase tracking-[0.12em] mb-3 px-1">Pendientes</h2>
           <div className="space-y-3">
             {pending.map(t => {
               const testDef = TESTS[t.test_code]
               return (
-                <Card key={t.id} className="p-4 border-l-4 border-[#f9a825]">
+                <Card key={t.id} className="p-4 sm:p-5 ring-1 ring-[#f9a825]/30 shadow-[0_2px_12px_rgba(249,168,37,0.12)]">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 bg-[#fff8e1] rounded-xl flex items-center justify-center flex-shrink-0">
                       <ClipboardList size={18} className="text-[#e6971a]" />
@@ -172,7 +172,7 @@ export default function PatientTestsPage() {
 
       {completed.length > 0 && (
         <div>
-          <h2 className="font-semibold text-[#526070] mb-3 text-sm uppercase tracking-wider">Completadas</h2>
+          <h2 className="text-xs font-bold text-[#526070] uppercase tracking-[0.12em] mb-3 px-1">Completadas</h2>
           <div className="space-y-3">
             {completed.map(t => {
               const testDef = TESTS[t.test_code]
@@ -222,7 +222,7 @@ export default function PatientTestsPage() {
                 <p className="text-sm text-[#526070] mt-1">{testDef?.name}</p>
               </div>
               {interp && (
-                <div className={`p-4 rounded-xl text-center border ${interp.color === 'green' ? 'bg-emerald-50 border-emerald-200' : interp.color === 'yellow' ? 'bg-amber-50 border-amber-200' : 'bg-red-50 border-red-200'}`}>
+                <div className={`p-5 rounded-2xl text-center border ${interp.color === 'green' ? 'bg-emerald-50 border-emerald-200/60' : interp.color === 'yellow' ? 'bg-amber-50 border-amber-200/60' : 'bg-red-50 border-red-200/60'}`}>
                   <Badge color={interp.color as 'green' | 'yellow' | 'red'} className="mb-2">{interp.label}</Badge>
                   <p className="text-sm text-[#526070]">{interp.description}</p>
                 </div>

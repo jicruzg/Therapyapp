@@ -45,10 +45,10 @@ export default function NotificationsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <p className="text-sm font-semibold text-[#f9a825] uppercase tracking-widest mb-1">Bandeja</p>
-        <h1 className="text-3xl font-bold text-[#0d1b2a]">Notificaciones</h1>
-        <p className="text-[#526070] mt-1">{notifications.filter(n => !n.read).length} sin leer</p>
+      <div className="pt-1">
+        <p className="text-xs font-bold text-[#f9a825] uppercase tracking-[0.15em] mb-1.5">Bandeja</p>
+        <h1 className="text-3xl font-bold text-[#0d1b2a] tracking-tight">Notificaciones</h1>
+        <p className="text-[#526070] mt-1 text-sm">{notifications.filter(n => !n.read).length} sin leer</p>
       </div>
 
       {loading ? (
@@ -65,7 +65,7 @@ export default function NotificationsPage() {
           <div className="divide-y divide-[#f0f4f8]">
             {notifications.map(n => (
               <div key={n.id} className={`flex items-start gap-4 px-5 py-4 hover:bg-[#f8fafc] transition-colors ${!n.read ? 'bg-[#fff8e1]/40' : ''}`}>
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                <div className={`w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0 ${
                   n.type === 'test' ? 'bg-[#fff8e1]' : n.type === 'appointment' ? 'bg-[#e8f0f7]' : 'bg-[#f0f4f8]'
                 }`}>
                   {typeIcon(n.type)}

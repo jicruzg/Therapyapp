@@ -38,10 +38,10 @@ export default function TherapistTestsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <p className="text-sm font-semibold text-[#f9a825] uppercase tracking-widest mb-1">Seguimiento</p>
-        <h1 className="text-3xl font-bold text-[#0d1b2a]">Pruebas psicológicas</h1>
-        <p className="text-[#526070] mt-1">Seguimiento de todas las pruebas asignadas</p>
+      <div className="pt-1">
+        <p className="text-xs font-bold text-[#f9a825] uppercase tracking-[0.15em] mb-1.5">Seguimiento</p>
+        <h1 className="text-3xl font-bold text-[#0d1b2a] tracking-tight">Pruebas psicológicas</h1>
+        <p className="text-[#526070] mt-1 text-sm">Seguimiento de todas las pruebas asignadas</p>
       </div>
 
       {/* Filter */}
@@ -50,10 +50,10 @@ export default function TherapistTestsPage() {
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
+            className={`px-4 py-2.5 rounded-2xl text-sm font-semibold transition-all duration-200 ${
               filter === f
-                ? 'bg-[#194067] text-white shadow-sm'
-                : 'bg-white text-[#526070] border border-[#dce5ec] hover:border-[#194067]/40'
+                ? 'bg-[#194067] text-white shadow-[0_2px_8px_rgba(25,64,103,0.25)]'
+                : 'bg-white text-[#526070] border border-[#dce5ec] hover:border-[#b0c8de]'
             }`}
           >
             {f === 'all' ? 'Todas' : f === 'pending' ? 'Pendientes' : 'Completadas'}
@@ -121,7 +121,7 @@ export default function TherapistTestsPage() {
                   <p className="text-sm text-[#0d1b2a]">{interp.description}</p>
                 </div>
               )}
-              <div className="bg-[#f0f4f8] rounded-xl p-4 space-y-2">
+              <div className="bg-[#f0f4f8] rounded-2xl p-4 space-y-2.5">
                 {scores && Object.entries(scores).map(([k, v]) => (
                   <div key={k} className="flex justify-between text-sm">
                     <span className="text-[#526070] capitalize font-medium">{k}</span>
