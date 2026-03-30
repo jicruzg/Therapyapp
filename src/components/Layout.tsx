@@ -250,7 +250,7 @@ export default function Layout({ children }: LayoutProps) {
 
         {/* Page content — extra bottom padding on mobile for tab bar */}
         <main className="flex-1 overflow-y-auto p-4 pb-28 lg:p-8 lg:pb-8">
-          <div className="animate-fadeInUp">
+          <div className="animate-fadeInUp max-w-5xl mx-auto">
             {children}
           </div>
         </main>
