@@ -11,10 +11,10 @@ interface ModalProps {
 }
 
 const sizes = {
-  sm: 'max-w-sm',
-  md: 'max-w-lg',
-  lg: 'max-w-2xl',
-  xl: 'max-w-4xl',
+  sm: 'sm:max-w-sm',
+  md: 'sm:max-w-lg',
+  lg: 'sm:max-w-2xl',
+  xl: 'sm:max-w-4xl',
 }
 
 export function Modal({ open, onClose, title, children, size = 'md' }: ModalProps) {
@@ -27,15 +27,29 @@ export function Modal({ open, onClose, title, children, size = 'md' }: ModalProp
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4">
+      {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-[#0d1b2a]/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/40 backdrop-blur-md animate-fadeIn"
         onClick={onClose}
       />
-      <div className={`relative bg-white rounded-2xl shadow-[0_20px_60px_rgba(25,64,103,0.2)] w-full ${sizes[size]} max-h-[90vh] flex flex-col border border-[#dce5ec]`}>
+
+      {/* Panel — bottom sheet on mobile, centered dialog on sm+ */}
+      <div className={`
+        relative bg-white w-full ${sizes[size]} max-h-[92dvh] flex flex-col
+        rounded-t-3xl sm:rounded-2xl
+        shadow-[0_-4px_32px_rgba(0,0,0,0.12),0_0_0_0.5px_rgba(0,0,0,0.04)] sm:shadow-[0_20px_60px_rgba(25,64,103,0.2)]
+        border-0 sm:border sm:border-[#dce5ec]
+        animate-sheet
+      `}>
+        {/* Drag handle — mobile only */}
+        <div className="sm:hidden flex justify-center pt-3 pb-1 flex-shrink-0">
+          <div className="w-10 h-1 bg-[#dce5ec] rounded-full" />
+        </div>
+
         {title && (
-          <div className="flex items-center justify-between px-6 py-5 border-b border-[#dce5ec]">
-            <h2 className="text-lg font-bold text-[#0d1b2a]">{title}</h2>
+          <div className="flex items-center justify-between px-6 py-4 sm:py-5 border-b border-[#f0f4f8]">
+            <h2 className="text-base sm:text-lg font-bold text-[#0d1b2a]">{title}</h2>
             <button
               onClick={onClose}
               className="p-2 hover:bg-[#f0f4f8] rounded-xl transition-colors text-[#526070] hover:text-[#0d1b2a]"
