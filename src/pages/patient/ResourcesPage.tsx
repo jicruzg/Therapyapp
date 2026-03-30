@@ -207,7 +207,7 @@ export default function ResourcesPage() {
   /* ── Detail view ── */
   if (active) {
     return (
-      <div className="max-w-2xl space-y-6">
+      <div className="w-full max-w-2xl mx-auto space-y-6">
         <button
           onClick={() => setActiveResource(null)}
           className="flex items-center gap-1.5 text-sm font-semibold text-[#526070] hover:text-[#194067] transition-colors"
@@ -228,7 +228,7 @@ export default function ResourcesPage() {
 
   /* ── List view ── */
   return (
-    <div className="space-y-6 max-w-2xl">
+    <div className="space-y-6 w-full max-w-2xl mx-auto">
       <div className="pt-1">
         <p className="text-xs font-bold text-[#f9a825] uppercase tracking-[0.15em] mb-1.5">Apoyo</p>
         <h1 className="text-3xl font-bold text-[#0d1b2a] tracking-tight">Recursos</h1>

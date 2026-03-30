@@ -142,7 +142,7 @@ export default function Layout({ children }: LayoutProps) {
   const initials = profile?.full_name?.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase() ?? '?'
 
   return (
-    <div className="flex h-dvh bg-[#f0f4f8]">
+    <div className="flex h-dvh bg-[#f0f4f8] overflow-hidden">
 
       {/* ── Desktop Sidebar ────────────────────────────────── */}
       <div className="hidden lg:flex w-64 flex-shrink-0 flex-col h-full shadow-[4px_0_32px_rgba(25,64,103,0.12)]">
@@ -249,8 +249,8 @@ export default function Layout({ children }: LayoutProps) {
         </header>
 
         {/* Page content — extra bottom padding on mobile for tab bar */}
-        <main className="flex-1 overflow-y-auto p-4 pb-28 lg:p-8 lg:pb-8">
-          <div className="animate-fadeInUp max-w-5xl mx-auto">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 pb-28 lg:p-8 lg:pb-8 w-full">
+          <div className="animate-fadeInUp max-w-5xl mx-auto w-full min-w-0">
             {children}
           </div>
         </main>

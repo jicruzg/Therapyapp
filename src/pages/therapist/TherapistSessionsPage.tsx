@@ -142,7 +142,7 @@ export default function TherapistSessionsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-start justify-between pt-1">
+      <div className="flex items-start justify-between gap-3 flex-wrap pt-1">
         <div>
           <p className="text-xs font-bold text-[#f9a825] uppercase tracking-[0.15em] mb-1.5">Agenda</p>
           <h1 className="text-3xl font-bold text-[#0d1b2a] tracking-tight">{lang === 'pt' ? 'Consultas' : 'Citas'}</h1>

@@ -44,7 +44,7 @@ export default function NotificationsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full max-w-2xl mx-auto">
       <div className="pt-1">
         <p className="text-xs font-bold text-[#f9a825] uppercase tracking-[0.15em] mb-1.5">Bandeja</p>
         <h1 className="text-3xl font-bold text-[#0d1b2a] tracking-tight">Notificaciones</h1>

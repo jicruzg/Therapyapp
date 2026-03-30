@@ -136,7 +136,7 @@ export default function PatientTestsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full max-w-2xl mx-auto">
       <div>
         <p className="text-xs font-bold text-[#f9a825] uppercase tracking-[0.15em] mb-1.5">Evaluaciones</p>
         <h1 className="text-3xl font-bold text-[#0d1b2a] tracking-tight">Pruebas</h1>

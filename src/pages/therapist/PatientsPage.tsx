@@ -76,10 +76,10 @@ export default function PatientsPage() {
   const textareaClass = "w-full px-4 py-3 rounded-2xl border border-[#dce5ec] bg-white/80 hover:border-[#b0c8de] text-sm font-medium focus:outline-none focus:border-[#194067] focus:ring-2 focus:ring-[#194067]/10 resize-none text-[#0d1b2a] placeholder:text-[#8096a7] placeholder:font-normal shadow-[0_1px_3px_rgba(25,64,103,0.05)]"
 
   return (
-    <div className="space-y-6 max-w-3xl">
+    <div className="space-y-6 w-full">
 
       {/* Header */}
-      <div className="flex items-start justify-between pt-1">
+      <div className="flex items-start justify-between gap-3 flex-wrap pt-1">
         <div>
           <p className="text-xs font-bold text-[#f9a825] uppercase tracking-[0.15em] mb-1.5">
             {lang === 'pt' ? 'Gestão' : 'Gestión'}

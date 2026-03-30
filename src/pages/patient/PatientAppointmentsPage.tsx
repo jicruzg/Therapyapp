@@ -50,10 +50,10 @@ export default function PatientAppointmentsPage() {
   const past     = sessions.filter(s => s.status !== 'scheduled' || new Date(s.scheduled_at) < new Date())
 
   return (
-    <div className="space-y-6 max-w-2xl">
+    <div className="space-y-6 w-full max-w-2xl mx-auto">
 
       {/* Header */}
-      <div className="flex items-start justify-between pt-1">
+      <div className="flex items-start justify-between gap-3 flex-wrap pt-1">
         <div>
           <p className="text-xs font-bold text-[#f9a825] uppercase tracking-[0.15em] mb-1.5">Agenda</p>
           <h1 className="text-3xl font-bold text-[#0d1b2a] tracking-tight">Mis Citas</h1>

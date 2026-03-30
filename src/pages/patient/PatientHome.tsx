@@ -59,7 +59,7 @@ export default function PatientHome() {
   }
 
   return (
-    <div className="space-y-7 max-w-2xl">
+    <div className="space-y-7 w-full max-w-2xl mx-auto">
 
       {/* ── Greeting ── */}
       <div className="pt-1">

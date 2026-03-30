@@ -228,7 +228,7 @@ export default function PatientDetailPage() {
                 const testDef = TESTS[t.test_code]
                 const interp = t.score ? testDef?.interpretation(t.score) : null
                 return (
-                  <Card key={t.id} className="p-4 flex items-center gap-4">
+                  <Card key={t.id} className="p-4 flex items-center gap-3 flex-wrap sm:flex-nowrap">
                     <div className="w-10 h-10 bg-[#e8f0f7] rounded-xl flex items-center justify-center flex-shrink-0">
                       <ClipboardList size={18} className="text-[#194067]" />
                     </div>
@@ -237,7 +237,7 @@ export default function PatientDetailPage() {
                       <p className="text-xs text-[#8096a7] mt-0.5">{testDef?.description}</p>
                       <p className="text-xs text-[#8096a7] mt-0.5">Asignado: {format(new Date(t.assigned_at), "d MMM yyyy", { locale: es })}</p>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap flex-shrink-0">
                       {interp && <Badge color={interp.color as 'green' | 'yellow' | 'red'}>{interp.label}</Badge>}
                       <Badge color={t.status === 'completed' ? 'green' : 'orange'}>
                         {t.status === 'completed' ? 'Completado' : 'Pendiente'}

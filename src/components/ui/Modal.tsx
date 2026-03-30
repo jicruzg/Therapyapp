@@ -58,7 +58,7 @@ export function Modal({ open, onClose, title, children, size = 'md' }: ModalProp
             </button>
           </div>
         )}
-        <div className="overflow-y-auto flex-1 p-6">{children}</div>
+        <div className="overflow-y-auto overflow-x-hidden flex-1 p-5 sm:p-6">{children}</div>
       </div>
     </div>
   )

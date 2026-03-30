@@ -37,15 +37,15 @@ export default function TherapistTestsPage() {
   const filtered = tests.filter(t => filter === 'all' ? true : t.status === filter)
 
   return (
-    <div className="space-y-6">
-      <div className="pt-1">
+    <div className="space-y-6 w-full">
+      <div className="pt-1 w-full">
         <p className="text-xs font-bold text-[#f9a825] uppercase tracking-[0.15em] mb-1.5">Seguimiento</p>
         <h1 className="text-3xl font-bold text-[#0d1b2a] tracking-tight">Pruebas psicológicas</h1>
         <p className="text-[#526070] mt-1 text-sm">Seguimiento de todas las pruebas asignadas</p>
       </div>
 
       {/* Filter */}
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-wrap">
         {(['all', 'pending', 'completed'] as const).map(f => (
           <button
             key={f}

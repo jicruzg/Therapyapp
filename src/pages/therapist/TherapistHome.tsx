@@ -54,7 +54,7 @@ export default function TherapistHome() {
   ]
 
   return (
-    <div className="space-y-8 max-w-4xl">
+    <div className="space-y-8 w-full">
 
       {/* ── Greeting header ── */}
       <div className="pt-1">

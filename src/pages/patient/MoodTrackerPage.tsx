@@ -71,8 +71,8 @@ export default function MoodTrackerPage() {
   const avg = entries.length > 0 ? (entries.reduce((s, e) => s + e.mood, 0) / entries.length).toFixed(1) : '--'
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-start justify-between pt-1">
+    <div className="space-y-6 w-full max-w-2xl mx-auto">
+      <div className="flex items-start justify-between gap-3 flex-wrap pt-1">
         <div>
           <p className="text-xs font-bold text-[#f9a825] uppercase tracking-[0.15em] mb-1.5">Bienestar</p>
           <h1 className="text-3xl font-bold text-[#0d1b2a] tracking-tight">Estado de Ánimo</h1>
