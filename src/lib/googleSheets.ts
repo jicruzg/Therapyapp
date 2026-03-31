@@ -48,8 +48,11 @@ export async function sendTestResultToSheets(params: {
     // GET + URL param avoids the redirect body-loss problem of doPost
     const url = new URL(WEBHOOK_URL)
     url.searchParams.set('data', JSON.stringify(payload))
+    console.log('[Sheets] Enviando a:', url.toString().slice(0, 120) + '...')
+    console.log('[Sheets] Payload size:', JSON.stringify(payload).length, 'chars')
     await fetch(url.toString(), { mode: 'no-cors' })
-  } catch {
-    // Silently ignore — Google Sheets sync is non-critical
+    console.log('[Sheets] Fetch completado ✓')
+  } catch (err) {
+    console.error('[Sheets] Error:', err)
   }
 }
